@@ -13,8 +13,8 @@ export const contentItems=[
 {type:'Materiał',title:'Lista adapterów USB-C → jack do testów',meta:'Do pobrania • PDF',tag:'Audio'}
 ];
 export const reviews=[
-{title:'FiiO KA11',category:'Sprzęt audio',score:8.8,verdict:'Mały DAC z dużym zapasem mocy.'},
-{title:'SNOWSKY TINY A',category:'Gadżety',score:8.1,verdict:'Ciekawy kompromis między mobilnością a jakością.'},
-{title:'DaVinci Resolve',category:'Programy',score:9.2,verdict:'Potężny kombajn, który ciągle potrafi zaskoczyć.'}
+{title:'FiiO KA11',category:'Sprzęt audio',score:8.8,verdict:'Mały DAC z dużym zapasem mocy.',author:'Kapi',date:'Dzisiaj'},
+{title:'SNOWSKY TINY A',category:'Gadżety',score:8.1,verdict:'Ciekawy kompromis między mobilnością a jakością.',author:'Kapi',date:'Wczoraj'},
+{title:'DaVinci Resolve',category:'Programy',score:9.2,verdict:'Potężny kombajn, który ciągle potrafi zaskoczyć.',author:'Kapi',date:'12 lipca'}
 ];
 export const poll={question:'Który materiał powinien powstać jako następny?',binding:false,options:[{label:'Porównanie przenośnych DAC-ów USB-C',votes:46},{label:'Kulisy budowy VidEdit Studio',votes:34},{label:'Jak automatyzuję pracę z BUR',votes:20}]};

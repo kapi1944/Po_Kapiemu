@@ -1,15 +1,54 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { contentItems, poll, projects, reviews } from '../data/siteData';
-import { ProjectCard } from '../components/ProjectCard';
+import { FeedAktywnosci, KartaGlosowania, ModulyDashboardu, PanelPodsumowania, SekcjaPublikacji, SekcjaRecenzji } from '../components/DashboardPanels';
 import { Icon } from '../components/Icons';
-export function HomePage(){const [filter,setFilter]=useState<'active'|'all'>('active');const displayed=useMemo(()=>filter==='active'?projects.filter(p=>p.active):projects,[filter]);const total=poll.options.reduce((s,x)=>s+x.votes,0);return <div className="page-wrap home-page">
-<section className="hero"><div className="hero-copy"><div className="hero-kicker"><span className="live-dot"/> Witaj w Po Kapiemu! 👋</div><h1>Twoje centrum projektów,<br/><span>pomysłów i współpracy.</span></h1><p>Zwarty dashboard do śledzenia tego, co tworzę, testuję i rozwijam razem ze społecznością.</p><div className="hero-actions"><Link className="button primary" to="/projekty">Zobacz projekty <Icon name="arrow" size={17}/></Link><Link className="button secondary" to="/glosowania">Weź udział <Icon name="vote" size={17}/></Link></div></div><div className="hero-console" aria-hidden="true"><div className="console-top"><b>PO KAPIEMU / WORKSPACE</b><div className="window-actions"><i>—</i><i>□</i><i>×</i></div></div><div className="console-body"><div className="console-line wide"/><div className="console-line medium"/><div className="console-line short"/><div className="console-window"><div className="console-card c1"><span>01</span><b>BUILD</b></div><div className="console-card c2"><span>02</span><b>TEST</b></div><div className="console-card c3"><span>03</span><b>SHARE</b></div></div><div className="console-progress"><span/></div></div></div></section>
-<section className="summary-grid" aria-label="Szybki przegląd"><article className="summary-card technical"><Icon name="projects" size={19}/><div><b>3</b><span>Aktywne projekty</span></div><small>+1 w tym miesiącu</small></article><article className="summary-card music"><Icon name="vote" size={19}/><div><b>1</b><span>Aktywne głosowanie</span></div><small>100 głosów</small></article><article className="summary-card blocks"><Icon name="content" size={19}/><div><b>4</b><span>Nowe publikacje</span></div><small>Teraz się dzieje</small></article><article className="summary-card experimental"><Icon name="reviews" size={19}/><div><b>3</b><span>Recenzje w kolejce</span></div><small>Do publikacji</small></article></section>
-<section className="section-block"><div className="section-head"><div><span className="section-kicker">TERAZ ROBIĘ</span><h2>Projekty w ruchu</h2><p>Najważniejsze rzeczy, nad którymi aktualnie pracuję.</p></div><div className="segmented"><button className={filter==='active'?'active':''} onClick={()=>setFilter('active')}>Aktywne</button><button className={filter==='all'?'active':''} onClick={()=>setFilter('all')}>Wszystkie</button></div></div><div className="projects-grid">{displayed.map(p=><ProjectCard key={p.slug} project={p}/>)}</div><div className="section-more"><Link to="/projekty">Przejdź do wszystkich projektów <Icon name="arrow" size={16}/></Link></div></section>
-<section className="dashboard-row"><div className="activity-panel"><div className="compact-heading"><div><span className="section-kicker">NA ŻYWO</span><h2>Teraz się dzieje</h2></div><Link className="text-link" to="/tresci">Cały feed <Icon name="arrow" size={15}/></Link></div><div className="activity-list"><div><span className="activity-icon technical"><Icon name="projects" size={15}/></span><p><b>Asystent BUR</b> otrzymał nowy import harmonogramów.<small>12 min temu</small></p></div><div><span className="activity-icon music"><Icon name="vote" size={15}/></span><p>Wystartowało głosowanie o kolejny materiał.<small>38 min temu</small></p></div><div><span className="activity-icon blocks"><Icon name="reviews" size={15}/></span><p>Nowa recenzja: <b>FiiO KA11</b> jest gotowa.<small>Dzisiaj, 09:24</small></p></div><div><span className="activity-icon experimental"><Icon name="briefcase" size={15}/></span><p>Pojawiła się propozycja współpracy.<small>Wczoraj</small></p></div></div></div><div className="poll-card feature-card"><div className="card-topline"><span className="tag hot">GŁOSOWANIE</span><span className="binding">Niewiążące</span></div><h2>{poll.question}</h2><p>Twój głos pomaga mi zdecydować, co ma dostać pierwszeństwo.</p><div className="poll-options">{poll.options.map((o,i)=>{const pct=Math.round(o.votes/total*100);return <button key={o.label}><span className="poll-letter">{String.fromCharCode(65+i)}</span><span className="poll-name">{o.label}</span><b>{pct}%</b><i style={{width:`${pct}%`}}/></button>})}</div><div className="poll-footer"><span>{total} głosów w wersji demonstracyjnej</span><Link to="/glosowania">Zagłosuj <Icon name="arrow" size={15}/></Link></div></div></section>
-<section className="dashboard-modules"><article className="collaboration-card"><div><span className="section-kicker">WSPÓŁPRACA</span><h2>Masz pomysł na wspólny projekt?</h2><p>Szukasz partnerów lub chcesz dołączyć do czegoś ciekawego? Przejdź do miejsca współpracy.</p></div><Link className="button secondary compact" to="/wspolpraca">Przejdź do współpracy <Icon name="arrow" size={15}/></Link></article><article className="categories-card"><span className="section-kicker">KATEGORIE</span><div className="category-list"><span className="technical">Techniczne</span><span className="music">Muzyczne</span><span className="blocks">Klockowe</span><span className="experimental">Eksperymentalne</span></div></article><article className="reminders-card"><div className="compact-heading"><div><span className="section-kicker">PLAN DNIA</span><h2>Przypomnienia</h2></div></div><ul><li><i/>Publikacja filmu o VidEdit <small>Dzisiaj</small></li><li><i/>Zamknięcie głosowania <small>Za 3 dni</small></li><li><i/>Aktualizacja strony WWW <small>W tym tygodniu</small></li></ul></article></section>
-<section className="section-block"><div className="section-head"><div><span className="section-kicker">NOWE</span><h2>Ostatnio opublikowane</h2><p>Filmy, aktualizacje, artykuły i materiały do pobrania.</p></div><Link className="text-link desktop-link" to="/tresci">Wszystkie treści <Icon name="arrow" size={16}/></Link></div><div className="content-grid">{contentItems.map((item,i)=><article className="content-card" key={item.title}><div className={`content-thumb thumb-${i+1}`}><span>{item.tag}</span><div className="play-or-doc">{item.type==='Film'?'▶':item.type[0]}</div></div><div className="content-body"><span>{item.type}</span><h3>{item.title}</h3><p>{item.meta}</p></div></article>)}</div></section>
-<section className="section-block reviews-section"><div className="section-head"><div><span className="section-kicker">SPRAWDZONE PO KAPIEMU</span><h2>Ostatnie recenzje</h2></div><Link className="text-link desktop-link" to="/recenzje">Więcej recenzji <Icon name="arrow" size={16}/></Link></div><div className="reviews-grid">{reviews.map(r=><article className="review-card" key={r.title}><div><span>{r.category}</span><h3>{r.title}</h3><p>{r.verdict}</p></div><div className="score"><strong>{r.score}</strong><small>/10</small></div></article>)}</div></section>
-<section className="support-strip"><div><span className="section-kicker">WSPARCIE</span><h2>Chcesz pomóc mi robić więcej?</h2><p>Na razie bez płatności — pierwsza wersja pokazuje, jak ta część serwisu będzie działała.</p></div><Link className="button secondary" to="/wsparcie"><Icon name="heart" size={17}/> Zobacz możliwości wsparcia</Link></section>
-</div>}
+import { ProjectCard } from '../components/ProjectCard';
+import { projects, type Project } from '../data/siteData';
+
+type TrybProjektow = 'active' | 'all';
+type FiltrKategorii = 'all' | Project['category'];
+
+const filtryKategorii: Array<{ value: FiltrKategorii; label: string }> = [
+ { value: 'all', label: 'Wszystkie' },
+ { value: 'tools', label: 'Techniczne' },
+ { value: 'video', label: 'Muzyczne' },
+ { value: 'community', label: 'Klockowe' },
+ { value: 'secret', label: 'Eksperymentalne' },
+];
+
+export function HomePage() {
+ const [tryb, setTryb] = useState<TrybProjektow>('active');
+ const [kategoria, setKategoria] = useState<FiltrKategorii>('all');
+ const widoczneProjekty = useMemo(() => projects.filter(projekt => (tryb === 'all' || projekt.active) && (kategoria === 'all' || projekt.category === kategoria)), [tryb, kategoria]);
+
+ return <div className="page-wrap home-page">
+  <section className="hero" aria-labelledby="naglowek-powitalny">
+   <div className="hero-copy">
+    <div className="hero-kicker"><span className="live-dot"/> Witaj w Po Kapiemu! 👋</div>
+    <h1 id="naglowek-powitalny">Twoje centrum projektów,<br/><span>pomysłów i współpracy.</span></h1>
+    <p>Zwarty dashboard do śledzenia tego, co tworzę, testuję i rozwijam razem ze społecznością.</p>
+    <div className="hero-actions"><Link className="button primary" to="/projekty">Zobacz projekty <Icon name="arrow" size={17}/></Link><Link className="button secondary" to="/glosowania">Weź udział <Icon name="vote" size={17}/></Link></div>
+   </div>
+   <div className="hero-console" aria-label="Neutralny podgląd procesu projektu">
+    <div className="console-top"><b>PO KAPIEMU / WORKSPACE</b><div className="window-actions" aria-hidden="true"><i>—</i><i>□</i><i>×</i></div></div>
+    <div className="console-body"><div className="console-line wide"/><div className="console-line medium"/><div className="console-line short"/><div className="console-window"><div className="console-card c1"><span>01</span><b>BUILD</b></div><div className="console-card c2"><span>02</span><b>TEST</b></div><div className="console-card c3"><span>03</span><b>SHARE</b></div></div><div className="console-progress"><span/></div></div>
+   </div>
+  </section>
+
+  <PanelPodsumowania/>
+
+  <section className="section-block projects-section" aria-labelledby="naglowek-projektow">
+   <div className="section-head"><div><span className="section-kicker">TERAZ ROBIĘ</span><h2 id="naglowek-projektow">Aktywne projekty</h2><p>Najważniejsze rzeczy, nad którymi aktualnie pracuję.</p></div><div className="segmented" role="group" aria-label="Zakres projektów"><button className={tryb === 'active' ? 'active' : ''} onClick={() => setTryb('active')}>Aktywne</button><button className={tryb === 'all' ? 'active' : ''} onClick={() => setTryb('all')}>Wszystkie</button></div></div>
+   <div className="project-filters" aria-label="Filtr kategorii">{filtryKategorii.map(filtr => <button key={filtr.value} className={kategoria === filtr.value ? 'active' : ''} onClick={() => setKategoria(filtr.value)}>{filtr.label}</button>)}</div>
+   <div className="projects-grid">{widoczneProjekty.map(projekt => <ProjectCard key={projekt.slug} project={projekt}/>)}</div>
+   <div className="section-more"><Link to="/projekty">Przejdź do wszystkich projektów <Icon name="arrow" size={16}/></Link></div>
+  </section>
+
+  <section className="dashboard-row"><FeedAktywnosci/><KartaGlosowania/></section>
+  <ModulyDashboardu/>
+  <SekcjaPublikacji/>
+  <SekcjaRecenzji/>
+
+  <section className="support-strip"><div><span className="section-kicker">WSPARCIE</span><h2>Chcesz pomóc mi robić więcej?</h2><p>Na razie bez płatności — pierwsza wersja pokazuje, jak ta część serwisu będzie działała.</p></div><Link className="button secondary" to="/wsparcie"><Icon name="heart" size={17}/> Zobacz możliwości wsparcia</Link></section>
+ </div>;
+}
