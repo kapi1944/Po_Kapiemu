@@ -10,14 +10,19 @@ const aktywnosci = [
 ] as const;
 
 export function PanelPodsumowania() {
- return <section className="summary-grid" aria-label="Szybki przegląd">
-  <article className="summary-card technical"><Icon name="projects" size={19}/><div><b>3</b><span>Aktywne projekty</span></div><small>+1 w tym miesiącu</small></article>
-  <article className="summary-card music"><Icon name="vote" size={19}/><div><b>1</b><span>Aktywne głosowanie</span></div><small>100 głosów</small></article>
-  <article className="summary-card blocks"><Icon name="content" size={19}/><div><b>4</b><span>Nowe publikacje</span></div><small>Teraz się dzieje</small></article>
-  <article className="summary-card experimental"><Icon name="reviews" size={19}/><div><b>3</b><span>Recenzje w kolejce</span></div><small>Do publikacji</small></article>
+ return <section className="summary-layout" aria-label="Szybki przegląd i status ogólny">
+  <div className="summary-grid">
+   <article className="summary-card technical"><Icon name="projects" size={19}/><div><b>3</b><span>Aktywne projekty</span></div><small>+1 w tym miesiącu</small></article>
+   <article className="summary-card music"><Icon name="vote" size={19}/><div><b>1</b><span>Aktywne głosowania</span></div><small>100 oddanych głosów</small></article>
+   <article className="summary-card blocks"><Icon name="activity" size={19}/><div><b>4</b><span>Nowe aktywności</span></div><small>Od ostatniej wizyty</small></article>
+   <article className="summary-card experimental"><Icon name="content" size={19}/><div><b>3</b><span>Do publikacji</span></div><small>Materiały w kolejce</small></article>
+  </div>
+  <article className="overall-status">
+   <div className="status-ring"><div className="status-ring-content"><strong>13</strong><span>projektów łącznie</span></div></div>
+   <div className="status-legend"><h2>Status ogólny</h2><ul><li><i style={{background:'var(--technical)'}}/><span>W realizacji</span><b>6</b></li><li><i style={{background:'var(--blocks)'}}/><span>W planach</span><b>3</b></li><li><i style={{background:'var(--experimental)'}}/><span>Zakończone</span><b>2</b></li><li><i style={{background:'var(--muted)'}}/><span>Wstrzymane</span><b>2</b></li></ul></div>
+  </article>
  </section>;
 }
-
 export function FeedAktywnosci() {
  return <section className="activity-panel" aria-labelledby="naglowek-aktywnosci">
   <div className="compact-heading"><div><span className="section-kicker">NA ŻYWO</span><h2 id="naglowek-aktywnosci">Teraz się dzieje</h2></div><Link className="text-link" to="/tresci">Cały feed <Icon name="arrow" size={15}/></Link></div>
