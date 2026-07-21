@@ -1,44 +1,45 @@
 :root {
   color-scheme: dark;
-  font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: "Inter Variable", "Inter", "Segoe UI", system-ui, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  --bg: #090c11;
-  --panel: #121720;
-  --panel-elevated: #171d27;
-  --panel-2: #0e131b;
-  --text: #edf1f7;
-  --muted: #929cad;
-  --muted-strong: #b9c1ce;
-  --line: #26303d;
-  --strong-line: #3a4658;
-  --nav: #0a0e14;
-  --nav-text: #d8dee8;
-  --brand: #e5b546;
-  --brand-strong: #ffd273;
-  --brand-subtle: #352b16;
-  --focus: #ffe19b;
-  --technical: #43cdb3;
-  --technical-strong: #8de4d3;
-  --technical-subtle: #12332f;
-  --music: #d789f1;
-  --music-strong: #efb6ff;
-  --music-subtle: #33213b;
-  --blocks: #efb84e;
-  --blocks-strong: #ffd88e;
-  --blocks-subtle: #382914;
-  --experimental: #9a91ff;
-  --experimental-strong: #c6c1ff;
-  --experimental-subtle: #242143;
-  --violet: var(--experimental);
-  --cyan: var(--technical);
-  --amber: var(--blocks);
-  --rose: var(--music);
+  --bg: #0b0f14;
+  --section: #10161d;
+  --panel: #151d26;
+  --panel-elevated: #1b2631;
+  --panel-2: #10161d;
+  --text: #f5f7fa;
+  --muted: #8894a1;
+  --muted-strong: #b4bec9;
+  --line: #2b3947;
+  --strong-line: #3a4a59;
+  --nav: #090d12;
+  --nav-text: #dfe5eb;
+  --brand: #ff8247;
+  --brand-strong: #ff9a6c;
+  --brand-subtle: #35140a;
+  --focus: #ffc0a5;
+  --technical: #24a878;
+  --technical-strong: #45c995;
+  --technical-subtle: #0a241b;
+  --music: #f80000;
+  --music-strong: #ff3838;
+  --music-subtle: #2f0000;
+  --blocks: #d6a51a;
+  --blocks-strong: #f0c94a;
+  --blocks-subtle: #342805;
+  --experimental: #22b4dd;
+  --experimental-strong: #59cdee;
+  --experimental-subtle: #082734;
+  --reviews: #d96b2a;
+  --community: #21b0a6;
+  --error: #e5484d;
 }
 
 :root[data-theme='light'] {
   color-scheme: light;
-  --bg: #f2f4f7;
+  --bg: #f3f5f7;
+  --section: #edf1f4;
   --panel: #ffffff;
   --panel-elevated: #f8fafc;
   --panel-2: #f1f4f8;
@@ -47,30 +48,34 @@
   --muted-strong: #475264;
   --line: #d9e0e9;
   --strong-line: #b8c3d1;
-  --nav: #121720;
+  --nav: #111820;
   --nav-text: #d8dee8;
-  --brand: #c89121;
-  --brand-strong: #875d0c;
-  --brand-subtle: #fff0cd;
-  --focus: #8b5d08;
-  --technical: #138d7c;
-  --technical-strong: #07665d;
-  --technical-subtle: #d9f5ef;
-  --music: #a84bd0;
-  --music-strong: #792799;
-  --music-subtle: #f5e0fb;
-  --blocks: #d89112;
-  --blocks-strong: #985900;
-  --blocks-subtle: #fff0cc;
-  --experimental: #6e60d9;
-  --experimental-strong: #493db0;
-  --experimental-subtle: #e8e5ff;
+  --brand: #dc5926;
+  --brand-strong: #a83d17;
+  --brand-subtle: #fff0e9;
+  --focus: #8d3214;
+  --technical: #16845e;
+  --technical-strong: #0d6547;
+  --technical-subtle: #ddf5ec;
+  --music: #d40000;
+  --music-strong: #9f0000;
+  --music-subtle: #ffe3e3;
+  --blocks: #b78300;
+  --blocks-strong: #7e5900;
+  --blocks-subtle: #fff3cc;
+  --experimental: #0789af;
+  --experimental-strong: #056783;
+  --experimental-subtle: #dcf5fc;
+  --reviews: #b85218;
+  --community: #147d76;
+  --error: #c9363e;
 }
 
 @media (prefers-color-scheme: light) {
   :root:not([data-theme]) {
     color-scheme: light;
-    --bg: #f2f4f7;
+    --bg: #f3f5f7;
+    --section: #edf1f4;
     --panel: #ffffff;
     --panel-elevated: #f8fafc;
     --panel-2: #f1f4f8;
@@ -79,31 +84,40 @@
     --muted-strong: #475264;
     --line: #d9e0e9;
     --strong-line: #b8c3d1;
-    --nav: #121720;
+    --nav: #111820;
     --nav-text: #d8dee8;
-    --brand: #c89121;
-    --brand-strong: #875d0c;
-    --brand-subtle: #fff0cd;
-    --focus: #8b5d08;
-    --technical: #138d7c;
-    --technical-strong: #07665d;
-    --technical-subtle: #d9f5ef;
-    --music: #a84bd0;
-    --music-strong: #792799;
-    --music-subtle: #f5e0fb;
-    --blocks: #d89112;
-    --blocks-strong: #985900;
-    --blocks-subtle: #fff0cc;
-    --experimental: #6e60d9;
-    --experimental-strong: #493db0;
-    --experimental-subtle: #e8e5ff;
+    --brand: #dc5926;
+    --brand-strong: #a83d17;
+    --brand-subtle: #fff0e9;
+    --focus: #8d3214;
+    --technical: #16845e;
+    --technical-strong: #0d6547;
+    --technical-subtle: #ddf5ec;
+    --music: #d40000;
+    --music-strong: #9f0000;
+    --music-subtle: #ffe3e3;
+    --blocks: #b78300;
+    --blocks-strong: #7e5900;
+    --blocks-subtle: #fff3cc;
+    --experimental: #0789af;
+    --experimental-strong: #056783;
+    --experimental-subtle: #dcf5fc;
+    --reviews: #b85218;
+    --community: #147d76;
+    --error: #c9363e;
   }
 }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { min-width: 320px; min-height: 100vh; margin: 0; background: var(--bg); color: var(--text); }
+h1, h2, h3, .brand strong { font-family: "Sora Variable", "Sora", "Inter Variable", "Segoe UI", system-ui, sans-serif; }
 button, input, textarea, select { font: inherit; }
 button { cursor: pointer; }
 a { color: inherit; text-decoration: none; }
 ::selection { background: var(--brand); color: #171209; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}
