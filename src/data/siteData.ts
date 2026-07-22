@@ -1,3 +1,30 @@
+export type StatusTresci = 'idea' | 'draft' | 'scheduled' | 'ready' | 'published';
+export type TypTresci = 'project' | 'update' | 'video' | 'article' | 'review' | 'test' | 'comparison' | 'material';
+export type DostepTresci = 'public' | 'registered' | 'supporters';
+
+export type Tresc = {
+  id: string;
+  slug?: string;
+  title: string;
+  type: TypTresci;
+  status: StatusTresci;
+  excerpt?: string;
+  updatedAt?: string;
+  plannedAt?: string;
+  publishedAt?: string;
+  access: DostepTresci;
+  image?: string;
+  tags?: string[];
+};
+
+export const etykietyStatusowTresci: Record<StatusTresci, string> = {
+  idea: 'Pomysł', draft: 'Szkic', scheduled: 'Zaplanowany', ready: 'Gotowy', published: 'Opublikowany',
+};
+
+export const etykietyTypowTresci: Record<TypTresci, string> = {
+  project: 'Projekt', update: 'Aktualizacja', video: 'Film', article: 'Artykuł', review: 'Recenzja', test: 'Test', comparison: 'Porównanie', material: 'Materiał',
+};
+
 export type ProjectStatus = 'Pomysł' | 'Planowanie' | 'W trakcie' | 'Testy' | 'Aktywny' | 'Wstrzymany' | 'Zakończony';
 export type ProjectCategory = 'technical' | 'music' | 'blocks' | 'experimental';
 export type TypMaterialuRecenzenckiego = 'review' | 'test' | 'comparison';
@@ -36,11 +63,11 @@ export const projects: Project[] = [
 ];
 
 export const contentItems = [
-  { type:'Film', title:'Jak powstaje VidEdit Studio?', meta:'12 min · kulisy projektu', tag:'Wideo' },
-  { type:'Aktualizacja', title:'Asystent BUR: nowy import harmonogramów', meta:'Dzisiaj · 4 min czytania', tag:'Projekt' },
-  { type:'Artykuł', title:'Po co mi własne narzędzia?', meta:'6 min czytania', tag:'Po Kapiemu' },
-  { type:'Materiał', title:'Lista adapterów USB-C → jack do testów', meta:'Do pobrania · PDF', tag:'Audio' },
-];
+  { id:'jak-powstaje-videdit-studio', slug:'jak-powstaje-videdit-studio', type:'video', status:'published', access:'public', title:'Jak powstaje VidEdit Studio?', meta:'12 min · kulisy projektu', tag:'Wideo' },
+  { id:'asystent-bur-nowy-import-harmonogramow', slug:'asystent-bur-nowy-import-harmonogramow', type:'update', status:'published', access:'public', title:'Asystent BUR: nowy import harmonogramów', meta:'Dzisiaj · 4 min czytania', tag:'Projekt' },
+  { id:'po-co-mi-wlasne-narzedzia', slug:'po-co-mi-wlasne-narzedzia', type:'article', status:'published', access:'public', title:'Po co mi własne narzędzia?', meta:'6 min czytania', tag:'Po Kapiemu' },
+  { id:'lista-adapterow-usb-c-jack', slug:'lista-adapterow-usb-c-jack', type:'material', status:'published', access:'public', title:'Lista adapterów USB-C → jack do testów', meta:'Do pobrania · PDF', tag:'Audio' },
+] satisfies Array<Tresc & { meta: string; tag: string }>;
 
 export const aktywnosci = [
   { ikona:'projects', kolor:'technical', przed:'', wyroznienie:'Asystent BUR', po:' otrzymał nowy import harmonogramów.', czas:'12 min temu' },

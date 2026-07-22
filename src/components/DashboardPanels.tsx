@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { aktywnosci, contentItems, etykietyTypowMaterialowRecenzenckich, poll, projects, reviews, type ProjectStatus } from '../data/siteData';
+import { aktywnosci, contentItems, etykietyTypowMaterialowRecenzenckich, etykietyTypowTresci, poll, projects, reviews, type ProjectStatus } from '../data/siteData';
 import { Icon } from './Icons';
 import { KomunikatFunkcji } from './FeatureNotice';
 
@@ -44,7 +44,7 @@ export function ModulyDashboardu() {
 }
 
 export function SekcjaPublikacji() {
-  return <section className="section-block"><div className="section-head"><div><span className="section-kicker">NOWE</span><h2>Ostatnio opublikowane</h2><p>Filmy, aktualizacje, artykuły i materiały do pobrania.</p></div><Link className="text-link desktop-link" to="/tresci">Wszystkie treści <Icon name="arrow" size={16}/></Link></div><div className="content-grid">{contentItems.map((material,indeks) => <article className="content-card" key={material.title}><div className={`content-thumb thumb-${indeks + 1}`}><span>{material.tag}</span><div className="play-or-doc">{material.type === 'Film' ? '▶' : material.type[0]}</div></div><div className="content-body"><span>{material.type}</span><h3>{material.title}</h3><p>{material.meta}</p></div></article>)}</div></section>;
+  return <section className="section-block"><div className="section-head"><div><span className="section-kicker">NOWE</span><h2>Ostatnio opublikowane</h2><p>Filmy, aktualizacje, artykuły i materiały do pobrania.</p></div><Link className="text-link desktop-link" to="/tresci">Wszystkie treści <Icon name="arrow" size={16}/></Link></div><div className="content-grid">{contentItems.map((material,indeks) => <article className="content-card" key={material.title}><div className={`content-thumb thumb-${indeks + 1}`}><span>{material.tag}</span><div className="play-or-doc">{material.type === 'video' ? '▶' : etykietyTypowTresci[material.type][0]}</div></div><div className="content-body"><span>{etykietyTypowTresci[material.type]}</span><h3>{material.title}</h3><p>{material.meta}</p></div></article>)}</div></section>;
 }
 
 export function SekcjaRecenzji() {
