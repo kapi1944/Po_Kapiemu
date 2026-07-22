@@ -7,9 +7,44 @@ export const etykietyRekomendacjiProduktow: Record<EtykietaRekomendacjiProduktu,
   budget: 'Budżetowy wybór',
 };
 
+export type TypZrodlaDanych = 'producent' | 'po-kapiemu' | 'inne-zweryfikowane';
+
+export type ZrodloDanych = {
+  typ: TypZrodlaDanych;
+  nazwa: string;
+  url?: string;
+};
+
+export type WpisZrodlowy<T> = {
+  wartosc: T;
+  zrodlo: ZrodloDanych;
+};
+
+export type ZakresLiczbowy = {
+  min: number;
+  max: number;
+};
+
+export type WartoscTechniczna = string | number | boolean | ZakresLiczbowy;
+
+export type ParametrZrodlowy<T extends WartoscTechniczna = WartoscTechniczna> = {
+  producent?: WpisZrodlowy<T>;
+  pomiarPoKapiemu?: WpisZrodlowy<T>;
+  inne?: WpisZrodlowy<T>[];
+  powodBraku?: string;
+};
+
 export type CenaProduktu = {
   kwota: number;
   waluta: string;
+  zrodlo?: ZrodloDanych;
+};
+
+export type StatusRelacjiAutoraZProduktem = 'do-weryfikacji' | 'posiadam' | 'testowalem';
+
+export type RekomendacjeProduktu = {
+  sugestieSystemu: EtykietaRekomendacjiProduktu[];
+  zatwierdzonePrzezAutora: EtykietaRekomendacjiProduktu[];
 };
 
 export type ProduktPorownania<TParametry> = {
@@ -17,11 +52,12 @@ export type ProduktPorownania<TParametry> = {
   producent: string;
   model: string;
   typ: string;
+  relacjaAutora: StatusRelacjiAutoraZProduktem;
   cena: CenaProduktu | null;
   ocena: number | null;
   miniatura: string | null;
   werdykt: string | null;
-  rekomendacje: EtykietaRekomendacjiProduktu[];
+  rekomendacje: RekomendacjeProduktu;
   dlaKogo: string | null;
   dlaKogoNie: string | null;
   parametry: TParametry;
@@ -39,26 +75,28 @@ export type KategoriaPorownania<TParametry, TProdukt extends ProduktPorownania<T
 export type TypAdapteraUsbCJack = 'adapter' | 'dac';
 
 export type ParametryAdapteraUsbCJack = {
-  dacChip: string | null;
-  obslugaMikrofonu: boolean | null;
-  maksymalnePcm: string | null;
-  mocPrzy32Omach: string | null;
-  obslugiwanaImpedancjaSluchawek: string | null;
-  przyciski: boolean | null;
-  android: boolean | null;
-  windows: boolean | null;
-  snrDb?: number | null;
-  thdN?: string | null;
+  dacChip: ParametrZrodlowy<string>;
+  obslugaMikrofonu: ParametrZrodlowy<boolean>;
+  maksymalnePcm: ParametrZrodlowy<string>;
+  mocPrzy32OmachMw: ParametrZrodlowy<number>;
+  obslugiwanaImpedancjaSluchawekOhm: ParametrZrodlowy<ZakresLiczbowy>;
+  przyciski: ParametrZrodlowy<boolean>;
+  android: ParametrZrodlowy<boolean>;
+  windows: ParametrZrodlowy<boolean>;
+  snrDb: ParametrZrodlowy<number>;
+  thdNPercent: ParametrZrodlowy<number>;
 };
 
 export type AdapterUsbCJack = ProduktPorownania<ParametryAdapteraUsbCJack> & {
   typ: TypAdapteraUsbCJack;
 };
 
-export type WartoscPorownania = string | number | boolean | null | undefined;
+export type WartoscPorownania = string | number | boolean | null | undefined | ParametrZrodlowy;
 
 export type KolumnaPorownania<TProdukt> = {
   id: string;
   etykieta: string;
+  obowiazkowa?: boolean;
+  jednostka?: string;
   pobierzWartosc: (produkt: TProdukt) => WartoscPorownania;
 };
