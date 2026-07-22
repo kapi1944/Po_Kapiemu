@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { KomunikatFunkcji } from './FeatureNotice';
+import { SzybkieWyszukiwanie } from '../moduly/wyszukiwanie/SzybkieWyszukiwanie';
 import { Icon } from './Icons';
 
 const nawigacjaGlowna = [
@@ -58,7 +59,7 @@ export function Layout() {
     <main className="main-area">
       <header className="topbar">
         <div className="topbar-view"><span>Widok</span><button className={widokKompaktowy ? 'active' : ''} onClick={() => ustawWidokKompaktowy(true)}>Kompaktowy</button><button className={widokKompaktowy ? '' : 'active'} onClick={() => ustawWidokKompaktowy(false)}>Pełny</button></div>
-        <KomunikatFunkcji klasaKontenera="komunikat-funkcji--wyszukiwanie" klasaPrzycisku="topbar-search" etykieta="Informacja o wyszukiwaniu" tytul="Wyszukiwanie" opis="Wyszukiwanie projektów, pomysłów i treści jest w przygotowaniu."><Icon name="search" size={16}/><span>Szukaj projektów, pomysłów…</span></KomunikatFunkcji>
+        <SzybkieWyszukiwanie/>
         <div className="topbar-actions"><NavLink className="button primary compact topbar-add" to="/dodaj-pomysl"><Icon name="plus" size={16}/><span>Dodaj pomysł</span></NavLink><KomunikatFunkcji klasaPrzycisku="topbar-theme" etykieta="Informacja o powiadomieniach" tytul="Powiadomienia" opis="Centrum powiadomień jest w przygotowaniu. Będzie zbierać ważne zmiany w projektach i aktywność."><Icon name="bell" size={17}/></KomunikatFunkcji><button className="topbar-theme" onClick={zmienMotyw} aria-label={`Zmień motyw. Obecnie: ${etykietaMotywu}`}><Icon name={motyw === 'dark' ? 'moon' : 'sun'} size={17}/></button><details className="account-menu-wrap"><summary className="account-button"><Icon name="user" size={16}/><span>Konto</span></summary><nav className="account-menu" aria-label="Menu konta"><NavLink to="/moje-projekty">Moje projekty</NavLink><NavLink to="/obserwowane">Obserwowane</NavLink><NavLink to="/zapisane">Zapisane</NavLink><NavLink to="/moja-aktywnosc">Moja aktywność</NavLink></nav></details></div>
       </header>
       <header className="mobile-header"><NavLink to="/" className="mobile-brand"><span className="brand-mark small">PK</span><strong>Po Kapiemu</strong></NavLink><button className="icon-button" onClick={() => ustawMenuMobilneOtwarte(!menuMobilneOtwarte)} aria-label={menuMobilneOtwarte ? 'Zamknij menu' : 'Otwórz menu'}><Icon name="menu"/></button></header>
