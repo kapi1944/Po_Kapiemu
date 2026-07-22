@@ -1,0 +1,39 @@
+# Po Kapiemu — zastosowanie patchy bez Codexa
+# Repo lokalne:
+cd /c/Users/madej/Documents/____GitHub_Projects/___Projekty_GitHub/Po_Kapiemu/Po_Kapiemu
+
+git status
+git switch main
+git pull --ff-only origin main
+
+# ETAP 1 — załączniki w formularzu „Dodaj pomysł”
+git apply --check 01_dodaj_zalaczniki_pomyslu.patch
+git apply 01_dodaj_zalaczniki_pomyslu.patch
+
+npm run build
+npm run lint
+git diff --check
+git diff -- src/pages/MissingPages.tsx src/App.css
+
+git add src/pages/MissingPages.tsx src/App.css
+git commit -m "feat: dodaj zalaczniki do pomyslow"
+
+# ETAP 2 — większa i czytelniejsza typografia
+git apply --check 02_zwieksz_czytelnosc_ui.patch
+git apply 02_zwieksz_czytelnosc_ui.patch
+
+npm run build
+npm run lint
+git diff --check
+git diff -- src/App.css
+
+git add src/App.css
+git commit -m "style: zwieksz czytelnosc interfejsu"
+
+# Kontrola końcowa
+npm run dev
+
+# Po ręcznym sprawdzeniu:
+git status
+git log --oneline -5
+git push origin main

@@ -1,0 +1,97 @@
+diff --git a/src/App.css b/src/App.css
+index b97a772..2daec7a 100644
+--- a/src/App.css
++++ b/src/App.css
+@@ -361,3 +361,24 @@
+ .panel-publikacji { display: grid; gap: 16px; margin-top: 24px; padding: 20px; border: 1px solid var(--line); border-radius: 11px; background: var(--panel); }
+ .panel-publikacji__naglowek { display: flex; align-items: end; justify-content: space-between; gap: 16px; }.panel-publikacji h2 { margin: 5px 0; font-size: 21px; letter-spacing: -.035em; }.panel-publikacji p { margin: 0; color: var(--muted); font-size: 10px; }.panel-publikacji label,.panel-publikacji .etykieta-pola { display: grid; gap: 6px; color: var(--muted-strong); font-size: 9px; }.panel-publikacji input,.panel-publikacji select { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 9px; background: var(--panel-2); color: var(--text); }.panel-publikacji fieldset { min-width: 0; margin: 0; padding: 13px; border: 1px solid var(--line); border-radius: 9px; }.panel-publikacji legend { padding: 0 5px; color: var(--text); font-size: 10px; font-weight: 800; }.panel-publikacji__siatka { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }.panel-publikacji__status { display: grid; gap: 3px; margin-bottom: 12px !important; }.panel-publikacji__status b { color: var(--brand-strong); font-size: 13px; }.lista-pol-wyboru { display: grid; gap: 7px; margin: 8px 0 12px; }.lista-pol-wyboru label { grid-template-columns: auto 1fr; align-items: center; }.lista-pol-wyboru input { width: auto; }.panel-publikacji__platformy { display: grid; gap: 12px; }.platformy-dostepne,.dodaj-inna-platforme { display: flex; flex-wrap: wrap; gap: 8px; }.dodaj-inna-platforme input { flex: 1 1 220px; }.lista-publikacji { display: grid; gap: 8px; }.lista-publikacji article { display: grid; grid-template-columns: minmax(120px,.7fr) repeat(3,minmax(0,1fr)); align-items: end; gap: 10px; padding: 11px; border-radius: 8px; background: var(--panel-2); }.lista-publikacji article > div { display: grid; gap: 7px; }.lista-publikacji button:not(.button) { justify-self: start; border: 0; padding: 0; background: transparent; color: var(--muted); font-size: 9px; cursor: pointer; }
+ @media (max-width: 760px) { .panel-publikacji__siatka { grid-template-columns: 1fr; }.lista-publikacji article { grid-template-columns: repeat(2,minmax(0,1fr)); }.lista-publikacji article > div { grid-column: 1 / -1; } }
++
++
++/* Załączniki w formularzu Dodaj pomysł */
++.attachment-field { gap: 8px !important; }
++.attachment-label-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
++.attachment-label-row small { color: var(--muted); font-size: 10px; font-weight: 600; }
++.attachment-picker { position: relative; display: flex; min-height: 76px; align-items: center; justify-content: center; gap: 10px; border: 1px dashed var(--strong-line); border-radius: 10px; padding: 14px; background: var(--panel-2); color: var(--muted-strong); text-align: center; cursor: pointer; transition: border-color 160ms ease-out, background 160ms ease-out, color 160ms ease-out; }
++.attachment-picker:hover { border-color: var(--brand); background: var(--brand-subtle); color: var(--brand-strong); }
++.attachment-picker > span { display: grid; gap: 3px; }
++.attachment-picker b { color: var(--text); font-size: 12px; }
++.attachment-picker small { color: var(--muted); font-size: 10px; font-weight: 500; }
++.attachment-picker input { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; padding: 0; opacity: 0; cursor: pointer; }
++.attachment-picker:focus-within { outline: 2px solid var(--brand-strong); outline-offset: 2px; }
++.attachment-list { display: grid; gap: 7px; }
++.attachment-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px; background: var(--panel-2); }
++.attachment-item > span { min-width: 0; }
++.attachment-item b,.attachment-item small { display: block; }
++.attachment-item b { overflow: hidden; color: var(--text); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
++.attachment-item small { margin-top: 2px; color: var(--muted); font-size: 9px; }
++.attachment-item button { flex: none; border: 0; padding: 5px 7px; background: transparent; color: var(--brand-strong); font-size: 10px; font-weight: 800; }
++.attachment-demo-note { margin: -2px 0 0; color: var(--muted); font-size: 10px; line-height: 1.45; }
+diff --git a/src/pages/MissingPages.tsx b/src/pages/MissingPages.tsx
+index 77f2264..df43eeb 100644
+--- a/src/pages/MissingPages.tsx
++++ b/src/pages/MissingPages.tsx
+@@ -36,7 +36,62 @@ export function AccountPlaceholderPage({ rodzaj }: { rodzaj:keyof typeof opisyWi
+ 
+ export function AddIdeaPage() {
+   const [wyslano, ustawWyslano] = useState(false);
+-  return <div className="page-wrap inner-page"><Naglowek kicker="DODAJ POMYSŁ" title="Co warto zbudować albo sprawdzić?" desc="Zaproponuj projekt, test lub materiał. Formularz działa lokalnie jako demonstracja przyszłego procesu."/><form className="contact-form wide-card" onSubmit={zdarzenie => { zdarzenie.preventDefault(); ustawWyslano(true); }}><label>Tytuł pomysłu<input required name="tytul" placeholder="Krótka, konkretna nazwa"/></label><label>Kategoria<select name="kategoria"><option>Techniczne</option><option>Muzyczne</option><option>Klockowe</option><option>Eksperymentalne</option></select></label><label>Opis<textarea required name="opis" rows={6} placeholder="Jaki problem rozwiązuje i dlaczego warto się nim zająć?"/></label><button className="button primary" type="submit"><Icon name="plus" size={16}/> Dodaj pomysł</button>{wyslano && <div className="form-success">✓ Pomysł został przyjęty w wersji demonstracyjnej.</div>}</form></div>;
++  const [pliki, ustawPliki] = useState<File[]>([]);
++  const akceptowaneTypyPlikow = 'image/*,.pdf,.doc,.docx,.xls,.xlsx,.csv,.ppt,.pptx,.txt';
++
++  const dodajPliki = (listaPlikow: FileList | null) => {
++    if (!listaPlikow) return;
++
++    ustawPliki(obecne => {
++      const wynik = [...obecne];
++      for (const plik of Array.from(listaPlikow)) {
++        const juzDodany = wynik.some(obecny => obecny.name === plik.name && obecny.size === plik.size && obecny.lastModified === plik.lastModified);
++        if (!juzDodany) wynik.push(plik);
++      }
++      return wynik;
++    });
++  };
++
++  const usunPlik = (indeks: number) => ustawPliki(obecne => obecne.filter((_, pozycja) => pozycja !== indeks));
++  const formatujRozmiar = (bajty: number) => bajty >= 1024 * 1024 ? `${(bajty / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.ceil(bajty / 1024))} KB`;
++
++  return <div className="page-wrap inner-page">
++    <Naglowek kicker="DODAJ POMYSŁ" title="Co warto zbudować albo sprawdzić?" desc="Zaproponuj projekt, test lub materiał. Formularz działa lokalnie jako demonstracja przyszłego procesu."/>
++    <form className="contact-form wide-card" onSubmit={zdarzenie => { zdarzenie.preventDefault(); ustawWyslano(true); }}>
++      <label>Tytuł pomysłu<input required name="tytul" placeholder="Krótka, konkretna nazwa"/></label>
++      <label>Kategoria<select name="kategoria"><option>Techniczne</option><option>Muzyczne</option><option>Klockowe</option><option>Eksperymentalne</option></select></label>
++      <label>Opis<textarea required name="opis" rows={6} placeholder="Jaki problem rozwiązuje i dlaczego warto się nim zająć?"/></label>
++
++      <label className="attachment-field">
++        <span className="attachment-label-row"><span>Załączniki</span><small>opcjonalnie</small></span>
++        <span className="attachment-picker">
++          <Icon name="plus" size={18}/>
++          <span><b>Dodaj pliki</b><small>Grafiki, PDF, Word, Excel, CSV, PowerPoint lub TXT</small></span>
++          <input
++            type="file"
++            multiple
++            accept={akceptowaneTypyPlikow}
++            aria-label="Dodaj załączniki do pomysłu"
++            onChange={zdarzenie => {
++              dodajPliki(zdarzenie.currentTarget.files);
++              zdarzenie.currentTarget.value = '';
++            }}
++          />
++        </span>
++      </label>
++
++      {pliki.length > 0 && <div className="attachment-list" aria-live="polite">
++        {pliki.map((plik, indeks) => <div className="attachment-item" key={`${plik.name}-${plik.size}-${plik.lastModified}`}>
++          <span><b>{plik.name}</b><small>{formatujRozmiar(plik.size)}</small></span>
++          <button type="button" onClick={() => usunPlik(indeks)}>Usuń</button>
++        </div>)}
++      </div>}
++
++      <p className="attachment-demo-note">W wersji demonstracyjnej pliki są wybierane lokalnie i nie są jeszcze wysyłane na serwer.</p>
++      <button className="button primary" type="submit"><Icon name="plus" size={16}/> Dodaj pomysł</button>
++      {wyslano && <div className="form-success">✓ Pomysł został przyjęty w wersji demonstracyjnej.</div>}
++    </form>
++  </div>;
+ }
+ 
+ export function NotFoundPage() {
