@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { aktywnosci, contentItems, etykietyTypowMaterialowRecenzenckich, etykietyTypowTresci, poll, projects, reviews, type ProjectStatus } from '../data/siteData';
+import { BlokadaDlaGoscia, LIMIT_KART_DLA_GOSCIA } from './GuestLock';
 import { Icon } from './Icons';
 import { KomunikatFunkcji } from './FeatureNotice';
 
@@ -35,18 +36,29 @@ export function KartaGlosowania() {
   return <section className="poll-card feature-card" aria-labelledby="naglowek-glosowania"><div className="card-topline"><span className="tag hot">AKTYWNE GŁOSOWANIE</span><span className="binding">Niewiążące</span></div><h2 id="naglowek-glosowania">{poll.question}</h2><p>Wybór społeczności pomaga ustalić kolejność pracy.</p><div className="poll-options">{poll.options.map((opcja, indeks) => { const procent = Math.round(opcja.votes / liczbaGlosow * 100); return <KomunikatFunkcji key={opcja.label} klasaKontenera="komunikat-funkcji--pelna-szerokosc" klasaPrzycisku={`poll-result category-${opcja.category}`} etykieta={`Informacja o głosowaniu: ${opcja.label}`} tytul="Głosowanie na dashboardzie" opis="Oddanie głosu jest dostępne w module Głosowania. Ten widok pokazuje aktualne wyniki."><span className="poll-result-head"><span className="poll-letter">{String.fromCharCode(65 + indeks)}</span><span>{opcja.label}</span><b>{procent}%</b></span><span className="poll-result-track"><span style={{width:`${procent}%`}}/></span></KomunikatFunkcji>; })}</div><div className="poll-footer"><span>{liczbaGlosow} głosów</span><Link to="/glosowania">Zagłosuj <Icon name="arrow" size={15}/></Link></div></section>;
 }
 
-export function ModulyDashboardu() {
+export function ModulyDashboardu({ czyZalogowany = false }: { czyZalogowany?: boolean }) {
   return <section className="dashboard-modules" aria-label="Dodatkowe moduły dashboardu">
     <article className="collaboration-card"><div><span className="section-kicker">WSPÓŁPRACA</span><h2>Zróbmy coś dobrego razem.</h2><p>Jasne zasady, praktyczne formaty i projekty pasujące do Po Kapiemu.</p><div className="collaboration-chips"><span>Sprzęt do testów</span><span>Sponsoring</span><span>Afiliacja</span><span>Wspólny projekt</span></div></div><Link className="button secondary compact" to="/wspolpraca">Napisz w sprawie współpracy <Icon name="arrow" size={15}/></Link></article>
     <article className="categories-card"><span className="section-kicker">KATEGORIE</span><h2>Szybki skrót</h2><div className="category-list"><Link className="technical" to="/kategorie#techniczne">Techniczne</Link><Link className="music" to="/kategorie#muzyczne">Muzyczne</Link><Link className="blocks" to="/kategorie#klockowe">Klockowe</Link><Link className="experimental" to="/kategorie#eksperymentalne">Eksperymentalne</Link></div></article>
-    <article className="reminders-card"><div className="compact-heading"><div><span className="section-kicker">NADCHODZI</span><h2>Kolejna publikacja</h2></div></div><ul><li><i/><span>Kulisy budowy VidEdit Studio</span><small>Piątek · 18:00</small></li></ul><p className="reminders-login"><Icon name="lock" size={12}/> Pełna lista przypomnień będzie dostępna po zalogowaniu.</p></article>
+    <article className={`reminders-card ${!czyZalogowany ? 'guest-lock-shell guest-lock-shell--module' : ''}`}>
+      <div className={!czyZalogowany ? 'guest-lock-shell__content' : undefined} inert={!czyZalogowany || undefined} aria-hidden={!czyZalogowany || undefined}><div className="compact-heading"><div><span className="section-kicker">NADCHODZI</span><h2>Kolejna publikacja</h2></div></div><ul><li><i/><span>Kulisy budowy VidEdit Studio</span><small>Piątek · 18:00</small></li></ul></div>
+      {!czyZalogowany && <BlokadaDlaGoscia kompaktowa tytul="Kolejna publikacja dla zalogowanych" opis="Zaloguj się, aby zobaczyć termin i pełną listę nadchodzących publikacji."/>}
+    </article>
   </section>;
 }
 
-export function SekcjaPublikacji() {
-  return <section className="section-block"><div className="section-head"><div><span className="section-kicker">NOWE</span><h2>Ostatnio opublikowane</h2><p>Filmy, aktualizacje, artykuły i materiały do pobrania.</p></div><Link className="text-link desktop-link" to="/tresci">Wszystkie treści <Icon name="arrow" size={16}/></Link></div><div className="content-grid">{contentItems.map((material,indeks) => <article className="content-card" key={material.title}><div className={`content-thumb thumb-${indeks + 1}`}><span>{material.tag}</span><div className="play-or-doc">{material.type === 'video' ? '▶' : etykietyTypowTresci[material.type][0]}</div></div><div className="content-body"><span>{etykietyTypowTresci[material.type]}</span><h3>{material.title}</h3><p>{material.meta}</p></div></article>)}</div></section>;
+export function SekcjaPublikacji({ czyZalogowany = false }: { czyZalogowany?: boolean }) {
+  return <section className="section-block"><div className="section-head"><div><span className="section-kicker">NOWE</span><h2>Ostatnio opublikowane</h2><p>Filmy, aktualizacje, artykuły i materiały do pobrania.</p></div><Link className="text-link desktop-link" to="/tresci">Wszystkie treści <Icon name="arrow" size={16}/></Link></div><div className="content-grid">{contentItems.map((material,indeks) => {
+    const karta = <article className="content-card" key={material.title}><div className={`content-thumb thumb-${indeks + 1}`}><span>{material.tag}</span><div className="play-or-doc">{material.type === 'video' ? '▶' : etykietyTypowTresci[material.type][0]}</div></div><div className="content-body"><span>{etykietyTypowTresci[material.type]}</span><h3>{material.title}</h3><p>{material.meta}</p></div></article>;
+    const zablokowanaDlaGoscia = !czyZalogowany && indeks >= LIMIT_KART_DLA_GOSCIA;
+    if (!zablokowanaDlaGoscia) return karta;
+    return <div className="guest-lock-shell guest-lock-shell--content" key={material.title}>
+      <div className="guest-lock-shell__content" inert aria-hidden="true">{karta}</div>
+      <BlokadaDlaGoscia kompaktowa tytul="Więcej treści po zalogowaniu" opis="Zaloguj się, aby zobaczyć dalsze publikacje i materiały do pobrania."/>
+    </div>;
+  })}</div></section>;
 }
 
-export function SekcjaRecenzji() {
-  return <section className="section-block reviews-section"><div className="section-head"><div><span className="section-kicker">SPRAWDZONE PO KAPIEMU</span><h2>Recenzje, testy i porównania</h2><p>Wyróżnione materiały z konkretnym werdyktem.</p></div><Link className="text-link desktop-link" to="/recenzje">Zobacz wszystkie <Icon name="arrow" size={16}/></Link></div><div className="reviews-grid">{reviews.map((recenzja,indeks) => <article className={`review-card ${indeks === reviews.length - 1 ? 'locked-review' : ''}`} key={recenzja.title}><div className={`review-thumb review-thumb-${indeks + 1}`} aria-hidden="true"><i/><i/><i/></div><div className="review-copy"><span>{etykietyTypowMaterialowRecenzenckich[recenzja.typ]}</span><h3>{recenzja.title}</h3><p>{recenzja.verdict}</p></div><div className="score"><strong>{recenzja.score}</strong><small>/10</small></div></article>)}</div></section>;
+export function SekcjaRecenzji({ czyZalogowany = false }: { czyZalogowany?: boolean }) {
+  return <section className="section-block reviews-section"><div className="section-head"><div><span className="section-kicker">SPRAWDZONE PO KAPIEMU</span><h2>Recenzje, testy i porównania</h2><p>Wyróżnione materiały z konkretnym werdyktem.</p></div><Link className="text-link desktop-link" to="/recenzje">Zobacz wszystkie <Icon name="arrow" size={16}/></Link></div><div className="reviews-grid">{reviews.map((recenzja,indeks) => <article className={`review-card ${!czyZalogowany && indeks === reviews.length - 1 ? 'locked-review' : ''}`} key={recenzja.title}><div className={`review-thumb review-thumb-${indeks + 1}`} aria-hidden="true"><i/><i/><i/></div><div className="review-copy"><span>{etykietyTypowMaterialowRecenzenckich[recenzja.typ]}</span><h3>{recenzja.title}</h3><p>{recenzja.verdict}</p></div><div className="score"><strong>{recenzja.score}</strong><small>/10</small></div></article>)}</div></section>;
 }
