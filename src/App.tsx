@@ -8,13 +8,15 @@ import { AccountPlaceholderPage, AddIdeaPage, CategoriesPage, EquipmentPage, Faq
 import { ReviewsHubPage } from './pages/ReviewsHubPage';
 import { SearchResultsPage } from './pages/SearchResultsPage';
 import { AdapterComparisonPage } from './pages/AdapterComparisonPage';
+import { ContentDetailPage } from './pages/ContentDetailPage';
+import { ReviewDetailPage } from './pages/ReviewDetailPage';
 import './App.css';
 import './routes.css';
 
 export default function App() {
   return <BrowserRouter><Routes><Route element={<Layout/>}>
     <Route path="/" element={<HomePage/>}/><Route path="/projekty" element={<ProjectsPage/>}/><Route path="/projekty/:slug" element={<ProjectDetailPage/>}/>
-    <Route path="/glosowania" element={<PollsPage/>}/><Route path="/tresci" element={<ContentPage/>}/><Route path="/recenzje" element={<ReviewsHubPage/>}/><Route path="/szukaj" element={<SearchResultsPage/>}/><Route path="/porownania/adaptery-usb-c-jack" element={<AdapterComparisonPage/>}/>
+    <Route path="/glosowania" element={<PollsPage/>}/><Route path="/tresci" element={<ContentPage/>}/><Route path="/tresci/:slug" element={<ContentDetailPage/>}/><Route path="/recenzje" element={<ReviewsHubPage/>}/><Route path="/recenzje/:slug" element={<ReviewDetailPage/>}/><Route path="/szukaj" element={<SearchResultsPage/>}/><Route path="/porownania/adaptery-usb-c-jack" element={<AdapterComparisonPage/>}/>
     <Route path="/kategorie" element={<CategoriesPage/>}/><Route path="/faq" element={<FaqPage/>}/><Route path="/sprzet-i-polecane" element={<EquipmentPage/>}/>
     <Route path="/spolecznosc" element={<CommunityPage/>}/><Route path="/wsparcie" element={<SupportPage/>}/><Route path="/wspolpraca" element={<CooperationPage/>}/>
     <Route path="/moje-projekty" element={<AccountPlaceholderPage rodzaj="projekty"/>}/><Route path="/obserwowane" element={<AccountPlaceholderPage rodzaj="obserwowane"/>}/><Route path="/zapisane" element={<AccountPlaceholderPage rodzaj="zapisane"/>}/><Route path="/moja-aktywnosc" element={<AccountPlaceholderPage rodzaj="aktywnosc"/>}/>

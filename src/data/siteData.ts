@@ -81,6 +81,9 @@ export const contentItems = [
   { id:'po-co-mi-wlasne-narzedzia', slug:'po-co-mi-wlasne-narzedzia', type:'article', status:'published', access:'public', title:'Po co mi własne narzędzia?', meta:'6 min czytania', tag:'Po Kapiemu' },
   { id:'lista-adapterow-usb-c-jack', slug:'lista-adapterow-usb-c-jack', type:'material', status:'published', access:'public', title:'Lista adapterów USB-C → jack do testów', meta:'Do pobrania · PDF', tag:'Audio' },
 ] satisfies Array<Tresc & { meta: string; tag: string }>;
+export const redakcyjneTresci = [
+  { id:'roboczy-test-wyszukiwarki', slug:'roboczy-test-wyszukiwarki', type:'article', status:'draft', access:'public', title:'Roboczy test wyszukiwarki', meta:'Szkic redakcyjny', tag:'Robocze' },
+] satisfies Array<Tresc & { meta: string; tag: string }>;
 
 export const aktywnosci = [
   { ikona:'projects', kolor:'technical', przed:'', wyroznienie:'Asystent BUR', po:' otrzymał nowy import harmonogramów.', czas:'12 min temu' },
@@ -91,10 +94,10 @@ export const aktywnosci = [
 export const etykietyTypowMaterialowRecenzenckich: Record<TypMaterialuRecenzenckiego, string> = { review:'Recenzja', test:'Test', comparison:'Porównanie' };
 
 export const reviews = [
-  { typ:'review', title:'FiiO KA11', category:'Sprzęt audio', score:8.8, verdict:'Mały DAC z dużym zapasem mocy.', author:'Kapi', date:'Dzisiaj' },
-  { typ:'test', title:'SNOWSKY TINY A', category:'Gadżety', score:8.1, verdict:'Ciekawy kompromis między mobilnością a jakością.', author:'Kapi', date:'Wczoraj' },
-  { typ:'comparison', title:'DaVinci Resolve', category:'Programy', score:9.2, verdict:'Potężny kombajn, który ciągle potrafi zaskoczyć.', author:'Kapi', date:'12 lipca' },
-] satisfies Array<{ typ:TypMaterialuRecenzenckiego; title:string; category:string; score:number; verdict:string; author:string; date:string }>;
+  { slug:'fiio-ka11', status:'published', typ:'review', title:'FiiO KA11', category:'Sprzęt audio', score:8.8, verdict:'Mały DAC z dużym zapasem mocy.', author:'Kapi', date:'Dzisiaj' },
+  { slug:'snowsky-tiny-a', status:'published', typ:'test', title:'SNOWSKY TINY A', category:'Gadżety', score:8.1, verdict:'Ciekawy kompromis między mobilnością a jakością.', author:'Kapi', date:'Wczoraj' },
+  { slug:'davinci-resolve', status:'published', typ:'comparison', title:'DaVinci Resolve', category:'Programy', score:9.2, verdict:'Potężny kombajn, który ciągle potrafi zaskoczyć.', author:'Kapi', date:'12 lipca' },
+] satisfies Array<{ slug:string; status:StatusTresci; typ:TypMaterialuRecenzenckiego; title:string; category:string; score:number; verdict:string; author:string; date:string }>;
 
 export const poll = {
   question:'Który materiał powinien powstać jako następny?',
