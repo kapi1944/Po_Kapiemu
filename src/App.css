@@ -12,8 +12,8 @@
 .side-nav { display: flex; flex-direction: column; gap: 3px; padding: 4px 10px; }
 .nav-item { position: relative; display: flex; align-items: center; gap: 11px; min-height: 36px; border: 1px solid transparent; border-radius: 9px; padding: 8px 10px; color: #9eabb8; font-size: 11px; font-weight: 750; transition: transform 160ms ease-out, color 160ms ease-out, background 160ms ease-out, border-color 160ms ease-out, box-shadow 160ms ease-out; }
 .nav-item svg { flex: none; }
-.nav-item:hover:not(.active) { transform: scale(1.015); background: var(--brand); color: #211007; }
-.nav-item.active { border-color: var(--brand); background: color-mix(in srgb,var(--brand-subtle) 72%,transparent); color: var(--brand-strong); box-shadow: 0 0 24px rgba(255,130,71,.12); }
+.nav-item:hover:not(.active) { transform: scale(1.015); border-color: #FF8247; background: #FF8247; color: #211007; box-shadow: 0 8px 20px rgba(255,130,71,.2); }
+.nav-item.active { border-color: var(--brand); background: color-mix(in srgb,var(--brand-subtle) 72%,transparent); color: var(--brand-strong); box-shadow: 0 0 24px rgba(255,130,71,.16),inset 0 1px rgba(255,255,255,.05); }
 .nav-item.active::before { position: absolute; left: -1px; width: 3px; height: 16px; border-radius: 0 4px 4px 0; background: var(--brand); content: ""; }
 .sidebar-separator { height: 1px; margin: 10px 16px; background: rgba(255,255,255,.07); }
 .support-mini { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 9px; margin: 8px 10px; border: 1px solid rgba(255,130,71,.23); border-radius: 10px; padding: 10px; background: rgba(255,130,71,.07); color: var(--brand-strong); }
@@ -51,14 +51,18 @@
 .page-wrap { width: min(100%,1580px); margin: 0 auto; padding: 26px 30px 56px; }
 .is-compact .page-wrap { max-width: 1320px; }
 .button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid transparent; border-radius: 9px; padding: 10px 14px; font-size: 11px; font-weight: 850; transition: transform 160ms ease-out, border-color 160ms ease-out, background 160ms ease-out, box-shadow 160ms ease-out; }
-.button:hover { transform: translateY(-1px) scale(1.01); }
+.button:hover { transform: translateY(-1px) scale(1.01); box-shadow: 0 10px 24px rgba(255,130,71,.2); }
 .button.primary { background: var(--brand); color: #211007; box-shadow: 0 8px 26px rgba(255,130,71,.12); }
-.button.primary:hover { background: var(--brand-strong); box-shadow: 0 12px 30px rgba(255,130,71,.18); }
+.button.primary:hover { background: var(--brand-strong); box-shadow: 0 12px 30px rgba(255,130,71,.24),0 0 20px rgba(255,130,71,.12); }
 .button.secondary { border-color: var(--strong-line); background: var(--panel-elevated); color: var(--text); }
 .button.compact { padding: 8px 10px; font-size: 9px; }
 .text-link { display: inline-flex; align-items: center; gap: 6px; border: 0; padding: 0; background: none; color: var(--text); font-size: 10px; font-weight: 850; }
 .text-link:hover { color: var(--brand-strong); }
 .text-link.muted { color: var(--muted); cursor: not-allowed; }
+.topbar-theme, .account-button, .icon-button, .project-filters button, .category-pills button, .segmented button, .topbar-view button, .sidebar-add, .theme-switch, .sidebar-profile, .sidebar-social a, .support-card button { transition: transform 160ms ease-out, border-color 160ms ease-out, background 160ms ease-out, box-shadow 160ms ease-out, color 160ms ease-out; }
+.topbar-theme:hover, .account-button:hover, .icon-button:hover, .project-filters button:hover, .category-pills button:hover, .segmented button:hover, .topbar-view button:hover, .theme-switch:hover, .sidebar-profile:hover, .sidebar-social a:hover, .support-card button:hover { border-color: color-mix(in srgb,var(--brand) 58%,var(--line)); box-shadow: 0 7px 18px rgba(255,130,71,.14),0 0 14px rgba(255,130,71,.08); }
+.sidebar-add:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(255,130,71,.26),0 0 16px rgba(255,130,71,.12); }
+:where(.nav-item, .button, .topbar-theme, .account-button, .icon-button, .project-filters button, .category-pills button, .segmented button, .topbar-view button, .bookmark-button, .theme-switch, .sidebar-profile, .sidebar-social a, .support-card button, .project-card h3 a):focus-visible { outline: 2px solid var(--brand-strong); outline-offset: 2px; box-shadow: 0 0 0 4px rgba(255,130,71,.14),0 0 18px rgba(255,130,71,.12); }
 .section-block { border-top: 1px solid var(--line); padding: 32px 0; }
 .section-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 17px; }
 .section-kicker { color: var(--brand-strong); font-size: 8px; font-weight: 900; letter-spacing: .14em; }
@@ -119,7 +123,7 @@
 /* Projekty */
 .projects-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 16px; }
 .project-card { position: relative; display: flex; min-width: 0; min-height: 390px; overflow: hidden; flex-direction: column; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); box-shadow: 0 8px 20px rgba(0,0,0,.08); transition: transform 180ms ease-out,border-color 180ms ease-out,box-shadow 180ms ease-out; }
-.project-card:hover { transform: translateY(-4px); border-color: color-mix(in srgb,var(--category-color) 68%,var(--line)); box-shadow: 0 20px 40px color-mix(in srgb,var(--category-color) 16%,transparent); }
+.project-card:hover { transform: translateY(-2px) scale(1.018); border-color: var(--category-color); box-shadow: 0 18px 36px color-mix(in srgb,var(--category-color) 22%,transparent),0 0 28px color-mix(in srgb,var(--category-color) 12%,transparent); }
 .category-technical { --category-color: var(--technical); --category-strong: var(--technical-strong); --category-subtle: var(--technical-subtle); }
 .category-music { --category-color: var(--music); --category-strong: var(--music-strong); --category-subtle: var(--music-subtle); }
 .category-blocks { --category-color: var(--blocks); --category-strong: var(--blocks-strong); --category-subtle: var(--blocks-subtle); }
@@ -135,7 +139,7 @@
 .status-chip, .project-visual .category-badge { border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 5px 8px; background: rgba(8,11,16,.76); color: #f4f6f8; font-size: 8px; font-weight: 850; }
 .project-visual .category-badge { background: color-mix(in srgb,var(--category-color) 76%,#0b1016); color: #fff; }
 .bookmark-button { position: absolute; z-index: 1; top: 11px; right: 11px; display: grid; width: 32px; height: 32px; place-items: center; border: 1px solid rgba(255,255,255,.16); border-radius: 50%; background: rgba(8,11,16,.76); color: #f4f6f8; }
-.bookmark-button:hover, .bookmark-button[aria-pressed="true"] { border-color: var(--category-strong); background: var(--category-color); color: #fff; }
+.bookmark-button:hover, .bookmark-button[aria-pressed="true"] { border-color: var(--category-strong); background: var(--category-color); color: #fff; box-shadow: 0 0 18px color-mix(in srgb,var(--category-color) 42%,transparent); }
 .project-card.locked { opacity: .78; }
 .project-card-body { display: flex; flex: 1; flex-direction: column; padding: 18px; }
 .project-card h3 { margin: 0 0 7px; font-size: 19px; letter-spacing: -.04em; line-height: 1.12; }
@@ -277,10 +281,15 @@
   .page-wrap { padding: 18px 16px 44px; }.hero { border-radius: 12px; }.hero-copy { padding: 21px; }.hero h1 { font-size: 29px; }.hero-copy > p { font-size: 11px; }.hero-banner { min-height: 145px; }
   .summary-grid,.projects-grid,.content-grid,.reviews-grid,.comparison-grid,.three-cards,.support-options,.detail-grid,.simple-page-grid,.form-layout,.about-grid { grid-template-columns: 1fr; }
   .overall-status { grid-template-columns: 104px 1fr; }.status-ring { width: 100px; }.status-ring::before { width: 70px; }
-  .section-head { align-items: flex-start; flex-direction: column; }.project-card:hover { transform: translateY(-1px); }.reviews-section .reviews-grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; }.reviews-section .review-card { min-width: 86%; scroll-snap-align: start; }
+  .section-head { align-items: flex-start; flex-direction: column; }.project-card:hover { transform: translateY(-2px) scale(1.018); }.reviews-section .reviews-grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; }.reviews-section .review-card { min-width: 86%; scroll-snap-align: start; }
   .support-strip { align-items: flex-start; flex-direction: column; }.desktop-link { display: none; }.project-detail-hero h1 { font-size: 30px; }
 }
 
 @media (max-width: 390px) {
   .hero h1 { font-size: 26px; }.summary-card { min-height: 82px; }.overall-status { grid-template-columns: 1fr; justify-items: center; }.status-legend { width: 100%; }.project-card-footer { align-items: flex-start; flex-direction: column; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-item, .button, .project-card, .topbar-theme, .account-button, .icon-button, .project-filters button, .category-pills button, .segmented button, .topbar-view button, .bookmark-button, .sidebar-add, .theme-switch, .sidebar-profile, .sidebar-social a, .support-card button { transition-duration: .01ms; }
+  .nav-item:hover:not(.active), .button:hover, .project-card:hover, .sidebar-add:hover { transform: none; }
 }
