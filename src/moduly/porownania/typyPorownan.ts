@@ -17,12 +17,13 @@ export type ProduktPorownania<TParametry> = {
   parametry: TParametry;
 };
 
-export type KategoriaPorownania<TParametry> = {
+export type KategoriaPorownania<TParametry, TProdukt extends ProduktPorownania<TParametry> = ProduktPorownania<TParametry>> = {
   id: string;
   slug: string;
   nazwa: string;
   opis: string;
-  produkty: ProduktPorownania<TParametry>[];
+  produkty: TProdukt[];
+  ostatniaAktualizacja?: string;
 };
 
 export type TypAdapteraUsbCJack = 'adapter' | 'dac';
@@ -42,4 +43,12 @@ export type ParametryAdapteraUsbCJack = {
 
 export type AdapterUsbCJack = ProduktPorownania<ParametryAdapteraUsbCJack> & {
   typ: TypAdapteraUsbCJack;
+};
+
+export type WartoscPorownania = string | number | boolean | null | undefined;
+
+export type KolumnaPorownania<TProdukt> = {
+  id: string;
+  etykieta: string;
+  pobierzWartosc: (produkt: TProdukt) => WartoscPorownania;
 };
