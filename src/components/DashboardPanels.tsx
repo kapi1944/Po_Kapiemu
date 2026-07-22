@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { aktywnosci, contentItems, poll, projects, reviews, type ProjectStatus } from '../data/siteData';
+import { aktywnosci, contentItems, etykietyTypowMaterialowRecenzenckich, poll, projects, reviews, type ProjectStatus } from '../data/siteData';
 import { Icon } from './Icons';
 
 const grupyStatusow: Array<{ etykieta:string; statusy:ProjectStatus[]; kolor:string }> = [
@@ -45,5 +45,5 @@ export function SekcjaPublikacji() {
 }
 
 export function SekcjaRecenzji() {
-  return <section className="section-block reviews-section"><div className="section-head"><div><span className="section-kicker">SPRAWDZONE PO KAPIEMU</span><h2>Recenzje, testy i porównania</h2><p>Wyróżnione materiały z konkretnym werdyktem.</p></div><Link className="text-link desktop-link" to="/recenzje">Zobacz wszystkie <Icon name="arrow" size={16}/></Link></div><div className="reviews-grid">{reviews.map((recenzja,indeks) => <article className={`review-card ${indeks === reviews.length - 1 ? 'locked-review' : ''}`} key={recenzja.title}><div className={`review-thumb review-thumb-${indeks + 1}`} aria-hidden="true"><i/><i/><i/></div><div className="review-copy"><span>{recenzja.category.split(' · ')[0]}</span><h3>{recenzja.title}</h3><p>{recenzja.verdict}</p></div><div className="score"><strong>{recenzja.score}</strong><small>/10</small></div></article>)}</div></section>;
+  return <section className="section-block reviews-section"><div className="section-head"><div><span className="section-kicker">SPRAWDZONE PO KAPIEMU</span><h2>Recenzje, testy i porównania</h2><p>Wyróżnione materiały z konkretnym werdyktem.</p></div><Link className="text-link desktop-link" to="/recenzje">Zobacz wszystkie <Icon name="arrow" size={16}/></Link></div><div className="reviews-grid">{reviews.map((recenzja,indeks) => <article className={`review-card ${indeks === reviews.length - 1 ? 'locked-review' : ''}`} key={recenzja.title}><div className={`review-thumb review-thumb-${indeks + 1}`} aria-hidden="true"><i/><i/><i/></div><div className="review-copy"><span>{etykietyTypowMaterialowRecenzenckich[recenzja.typ]}</span><h3>{recenzja.title}</h3><p>{recenzja.verdict}</p></div><div className="score"><strong>{recenzja.score}</strong><small>/10</small></div></article>)}</div></section>;
 }

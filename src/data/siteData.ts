@@ -1,5 +1,6 @@
 export type ProjectStatus = 'Pomysł' | 'Planowanie' | 'W trakcie' | 'Testy' | 'Aktywny' | 'Wstrzymany' | 'Zakończony';
 export type ProjectCategory = 'technical' | 'music' | 'blocks' | 'experimental';
+export type TypMaterialuRecenzenckiego = 'review' | 'test' | 'comparison';
 
 export type Project = {
   slug: string;
@@ -47,11 +48,13 @@ export const aktywnosci = [
   { ikona:'reviews', kolor:'blocks', przed:'Nowa recenzja: ', wyroznienie:'FiiO KA11', po:' jest gotowa.', czas:'Dzisiaj, 09:24' },
 ] satisfies Array<{ ikona:string; kolor:ProjectCategory; przed:string; wyroznienie?:string; po?:string; czas:string }>;
 
+export const etykietyTypowMaterialowRecenzenckich: Record<TypMaterialuRecenzenckiego, string> = { review:'Recenzja', test:'Test', comparison:'Porównanie' };
+
 export const reviews = [
-  { title:'FiiO KA11', category:'Recenzja · sprzęt audio', score:8.8, verdict:'Mały DAC z dużym zapasem mocy.', author:'Kapi', date:'Dzisiaj' },
-  { title:'SNOWSKY TINY A', category:'Test · gadżety', score:8.1, verdict:'Ciekawy kompromis między mobilnością a jakością.', author:'Kapi', date:'Wczoraj' },
-  { title:'DaVinci Resolve', category:'Porównanie · programy', score:9.2, verdict:'Potężny kombajn, który ciągle potrafi zaskoczyć.', author:'Kapi', date:'12 lipca' },
-];
+  { typ:'review', title:'FiiO KA11', category:'Sprzęt audio', score:8.8, verdict:'Mały DAC z dużym zapasem mocy.', author:'Kapi', date:'Dzisiaj' },
+  { typ:'test', title:'SNOWSKY TINY A', category:'Gadżety', score:8.1, verdict:'Ciekawy kompromis między mobilnością a jakością.', author:'Kapi', date:'Wczoraj' },
+  { typ:'comparison', title:'DaVinci Resolve', category:'Programy', score:9.2, verdict:'Potężny kombajn, który ciągle potrafi zaskoczyć.', author:'Kapi', date:'12 lipca' },
+] satisfies Array<{ typ:TypMaterialuRecenzenckiego; title:string; category:string; score:number; verdict:string; author:string; date:string }>;
 
 export const poll = {
   question:'Który materiał powinien powstać jako następny?',
