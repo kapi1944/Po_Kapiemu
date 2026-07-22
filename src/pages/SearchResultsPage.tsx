@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Icon } from '../components/Icons';
 import { etykietyTypowTresci } from '../data/siteData';
-import { wyszukaj, type TypWynikuWyszukiwania, type WynikWyszukiwania } from '../moduly/wyszukiwanie/silnikWyszukiwania';
+import { pobierzFrazeZParametrowWyszukiwania, wyszukaj, type TypWynikuWyszukiwania, type WynikWyszukiwania } from '../moduly/wyszukiwanie/silnikWyszukiwania';
 
 type ZakladkaWyszukiwania = 'all' | 'project' | 'content' | 'review' | 'test' | 'comparison';
 
@@ -26,7 +26,7 @@ function filtrujWedlugZakladki(wyniki: WynikWyszukiwania[], zakladka: ZakladkaWy
 export function SearchResultsPage() {
   const [parametryWyszukiwania, ustawParametryWyszukiwania] = useSearchParams();
   const [zakladka, ustawZakladke] = useState<ZakladkaWyszukiwania>('all');
-  const fraza = parametryWyszukiwania.get('q') ?? '';
+  const fraza = pobierzFrazeZParametrowWyszukiwania(parametryWyszukiwania);
   const wszystkieWyniki = wyszukaj(fraza);
   const wyniki = filtrujWedlugZakladki(wszystkieWyniki, zakladka);
 

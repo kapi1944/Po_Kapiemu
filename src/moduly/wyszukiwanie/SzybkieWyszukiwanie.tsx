@@ -1,8 +1,8 @@
-import { type KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { type KeyboardEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Icon } from '../../components/Icons';
 import { etykietyTypowTresci } from '../../data/siteData';
-import { wyszukaj, type TypWynikuWyszukiwania, type WynikWyszukiwania } from './silnikWyszukiwania';
+import { pobierzFrazeZParametrowWyszukiwania, wyszukaj, type TypWynikuWyszukiwania, type WynikWyszukiwania } from './silnikWyszukiwania';
 
 const etykietyTypowWynikow: Record<TypWynikuWyszukiwania, string> = { ...etykietyTypowTresci, project: 'Projekty' };
 
@@ -19,17 +19,23 @@ export function SzybkieWyszukiwanie() {
   const [aktywnyIndeks, ustawAktywnyIndeks] = useState(0);
   const poleWyszukiwaniaRef = useRef<HTMLInputElement>(null);
   const nawiguj = useNavigate();
+  const lokalizacja = useLocation();
+  const frazaZAdresu = pobierzFrazeZParametrowWyszukiwania(lokalizacja.search);
+  const otworzOverlay = useCallback(() => {
+    if (lokalizacja.pathname === '/szukaj') ustawFraze(frazaZAdresu);
+    ustawOtwarte(true);
+  }, [frazaZAdresu, lokalizacja.pathname]);
   const wyniki = useMemo(() => wyszukaj(fraza), [fraza]);
   const grupyWynikow = useMemo(() => grupujWyniki(wyniki), [wyniki]);
 
   useEffect(() => {
     const obsluzSkrot = (zdarzenie: globalThis.KeyboardEvent) => {
-      if (zdarzenie.ctrlKey && zdarzenie.key.toLowerCase() === 'k') { zdarzenie.preventDefault(); ustawOtwarte(true); }
+      if (zdarzenie.ctrlKey && zdarzenie.key.toLowerCase() === 'k') { zdarzenie.preventDefault(); otworzOverlay(); }
       if (zdarzenie.key === 'Escape') ustawOtwarte(false);
     };
     document.addEventListener('keydown', obsluzSkrot);
     return () => document.removeEventListener('keydown', obsluzSkrot);
-  }, []);
+  }, [otworzOverlay]);
 
   useEffect(() => { if (otwarte) poleWyszukiwaniaRef.current?.focus(); }, [otwarte]);
   useEffect(() => { ustawAktywnyIndeks(0); }, [fraza]);
@@ -43,7 +49,7 @@ export function SzybkieWyszukiwanie() {
   };
 
   return <>
-    <button type="button" className="topbar-search" aria-haspopup="dialog" aria-expanded={otwarte} onClick={() => ustawOtwarte(true)}><Icon name="search" size={16}/><span>Szukaj projektów, pomysłów…</span><kbd>Ctrl K</kbd></button>
+    <button type="button" className="topbar-search" aria-haspopup="dialog" aria-expanded={otwarte} onClick={otworzOverlay}><Icon name="search" size={16}/><span>Szukaj projektów, pomysłów…</span><kbd>Ctrl K</kbd></button>
     {otwarte && <div className="wyszukiwanie-overlay" role="presentation" onMouseDown={() => ustawOtwarte(false)}>
       <section className="paleta-wyszukiwania" role="dialog" aria-modal="true" aria-labelledby="tytul-szybkiego-wyszukiwania" onMouseDown={zdarzenie => zdarzenie.stopPropagation()}>
         <h1 className="tylko-dla-czytnika" id="tytul-szybkiego-wyszukiwania">Szybkie wyszukiwanie</h1>

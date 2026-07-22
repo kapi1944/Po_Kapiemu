@@ -66,3 +66,8 @@ export function wyszukaj(tekst: string, wyniki = pobierzWynikiWyszukiwania()): W
     return frazy.every(fraza => przeszukiwanyTekst.includes(fraza));
   });
 }
+
+export function pobierzFrazeZParametrowWyszukiwania(parametry: string | URLSearchParams) {
+  const wartosc = typeof parametry === 'string' ? new URLSearchParams(parametry) : parametry;
+  return wartosc.get('q') ?? '';
+}
