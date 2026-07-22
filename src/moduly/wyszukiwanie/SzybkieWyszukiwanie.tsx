@@ -1,6 +1,5 @@
 import { type KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { KomunikatFunkcji } from '../../components/FeatureNotice';
 import { Icon } from '../../components/Icons';
 import { etykietyTypowTresci } from '../../data/siteData';
 import { wyszukaj, type TypWynikuWyszukiwania, type WynikWyszukiwania } from './silnikWyszukiwania';
@@ -57,7 +56,7 @@ export function SzybkieWyszukiwanie() {
             return <button type="button" className={'wynik-wyszukiwania ' + (aktywnyIndeks === indeks ? 'aktywny' : '')} id={'wynik-' + wynik.id} role="option" aria-selected={aktywnyIndeks === indeks} key={wynik.id} onMouseMove={() => ustawAktywnyIndeks(indeks)} onClick={() => otworzWynik(wynik)}><span className="wynik-wyszukiwania__typ">{etykietyTypowWynikow[wynik.typ]}</span><span className="wynik-wyszukiwania__tresc"><b>{wynik.tytul}</b><small>{wynik.opis}</small></span>{wynik.kategoria && <span className="wynik-wyszukiwania__kategoria">{wynik.kategoria}</span>}</button>;
           })}</section>)}
         </div>
-        <div className="paleta-wyszukiwania__stopka"><span><kbd>↑↓</kbd> nawigacja <kbd>↵</kbd> otwórz</span><KomunikatFunkcji klasaPrzycisku="paleta-wyszukiwania__wszystkie" etykieta="Informacja o pełnej stronie wyników" tytul="Pełna strona wyników" opis="Pełna lista wyników z filtrami jest w przygotowaniu.">Otwórz wszystkie wyniki</KomunikatFunkcji></div>
+        <div className="paleta-wyszukiwania__stopka"><span><kbd>↑↓</kbd> nawigacja <kbd>↵</kbd> otwórz</span><button type="button" className="paleta-wyszukiwania__wszystkie" onClick={() => { nawiguj('/szukaj?q=' + encodeURIComponent(fraza)); ustawOtwarte(false); }}>Otwórz wszystkie wyniki</button></div>
       </section>
     </div>}
   </>;
