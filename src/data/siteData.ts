@@ -41,6 +41,12 @@ export const contentItems = [
   { type:'Materiał', title:'Lista adapterów USB-C → jack do testów', meta:'Do pobrania · PDF', tag:'Audio' },
 ];
 
+export const aktywnosci = [
+  { ikona:'projects', kolor:'technical', przed:'', wyroznienie:'Asystent BUR', po:' otrzymał nowy import harmonogramów.', czas:'12 min temu' },
+  { ikona:'vote', kolor:'music', przed:'Wystartowało głosowanie o kolejny materiał.', czas:'38 min temu' },
+  { ikona:'reviews', kolor:'blocks', przed:'Nowa recenzja: ', wyroznienie:'FiiO KA11', po:' jest gotowa.', czas:'Dzisiaj, 09:24' },
+] satisfies Array<{ ikona:string; kolor:ProjectCategory; przed:string; wyroznienie?:string; po?:string; czas:string }>;
+
 export const reviews = [
   { title:'FiiO KA11', category:'Recenzja · sprzęt audio', score:8.8, verdict:'Mały DAC z dużym zapasem mocy.', author:'Kapi', date:'Dzisiaj' },
   { title:'SNOWSKY TINY A', category:'Test · gadżety', score:8.1, verdict:'Ciekawy kompromis między mobilnością a jakością.', author:'Kapi', date:'Wczoraj' },

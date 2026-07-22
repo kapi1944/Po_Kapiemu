@@ -1,22 +1,30 @@
 import { Link } from 'react-router-dom';
-import { contentItems, poll, reviews } from '../data/siteData';
+import { aktywnosci, contentItems, poll, projects, reviews, type ProjectStatus } from '../data/siteData';
 import { Icon } from './Icons';
 
-const aktywnosci = [
-  { ikona:'projects', kolor:'technical', tresc:<><b>Asystent BUR</b> otrzymał nowy import harmonogramów.</>, czas:'12 min temu' },
-  { ikona:'vote', kolor:'music', tresc:<>Wystartowało głosowanie o kolejny materiał.</>, czas:'38 min temu' },
-  { ikona:'reviews', kolor:'blocks', tresc:<>Nowa recenzja: <b>FiiO KA11</b> jest gotowa.</>, czas:'Dzisiaj, 09:24' },
-] as const;
+const grupyStatusow: Array<{ etykieta:string; statusy:ProjectStatus[]; kolor:string }> = [
+  { etykieta:'W realizacji', statusy:['W trakcie','Testy','Aktywny'], kolor:'var(--technical)' },
+  { etykieta:'W planach', statusy:['Pomysł','Planowanie'], kolor:'var(--blocks)' },
+  { etykieta:'Zakończone', statusy:['Zakończony'], kolor:'var(--experimental)' },
+  { etykieta:'Wstrzymane', statusy:['Wstrzymany'], kolor:'var(--muted)' },
+];
 
 export function PanelPodsumowania() {
+  const liczbaProjektow = projects.length;
+  const liczbaAktywnychProjektow = projects.filter(projekt => projekt.active).length;
+  const liczbaAktywnosci = aktywnosci.length;
+  const liczbaMaterialow = contentItems.length;
+  const rozkladStatusow = grupyStatusow.map(grupa => ({ ...grupa, liczba:projects.filter(projekt => grupa.statusy.includes(projekt.status)).length }));
+  let poczatekSegmentu = 0;
+  const tloRingu = rozkladStatusow.map(grupa => { const koniecSegmentu = poczatekSegmentu + (liczbaProjektow ? grupa.liczba / liczbaProjektow * 100 : 0); const segment = `${grupa.kolor} ${poczatekSegmentu}% ${koniecSegmentu}%`; poczatekSegmentu = koniecSegmentu; return segment; }).join(',');
   return <section className="summary-layout" aria-label="Szybki przegląd i status ogólny">
-    <div className="summary-grid"><article className="summary-card technical"><Icon name="projects" size={19}/><div><b>3</b><span>Aktywne projekty</span></div><small>+1 w tym miesiącu</small></article><article className="summary-card music"><Icon name="vote" size={19}/><div><b>1</b><span>Aktywne głosowania</span></div><small>100 oddanych głosów</small></article><article className="summary-card blocks"><Icon name="activity" size={19}/><div><b>4</b><span>Nowe aktywności</span></div><small>Od ostatniej wizyty</small></article><article className="summary-card experimental"><Icon name="content" size={19}/><div><b>3</b><span>Do publikacji</span></div><small>Materiały w kolejce</small></article></div>
-    <article className="overall-status"><div className="status-ring"><div className="status-ring-content"><strong>13</strong><span>projektów łącznie</span></div></div><div className="status-legend"><h2>Status ogólny</h2><ul><li><i style={{background:'var(--technical)'}}/><span>W realizacji</span><b>6</b></li><li><i style={{background:'var(--blocks)'}}/><span>W planach</span><b>3</b></li><li><i style={{background:'var(--experimental)'}}/><span>Zakończone</span><b>2</b></li><li><i style={{background:'var(--muted)'}}/><span>Wstrzymane</span><b>2</b></li></ul></div></article>
+    <div className="summary-grid"><article className="summary-card technical"><Icon name="projects" size={19}/><div><b>{liczbaAktywnychProjektow}</b><span>Aktywne projekty</span></div><small>{liczbaProjektow} projektów łącznie</small></article><article className="summary-card music"><Icon name="vote" size={19}/><div><b>1</b><span>Aktywne głosowania</span></div><small>100 oddanych głosów</small></article><article className="summary-card blocks"><Icon name="activity" size={19}/><div><b>{liczbaAktywnosci}</b><span>Nowe aktywności</span></div><small>Od ostatniej wizyty</small></article><article className="summary-card experimental"><Icon name="content" size={19}/><div><b>{liczbaMaterialow}</b><span>Do publikacji</span></div><small>Materiały w kolejce</small></article></div>
+    <article className="overall-status"><div className="status-ring" style={{background:`conic-gradient(${tloRingu})`}}><div className="status-ring-content"><strong>{liczbaProjektow}</strong><span>projektów łącznie</span></div></div><div className="status-legend"><h2>Status ogólny</h2><ul>{rozkladStatusow.map(grupa => <li key={grupa.etykieta}><i style={{background:grupa.kolor}}/><span>{grupa.etykieta}</span><b>{grupa.liczba}</b></li>)}</ul></div></article>
   </section>;
 }
 
 export function FeedAktywnosci() {
-  return <section className="activity-panel" aria-labelledby="naglowek-aktywnosci"><div className="compact-heading"><div><span className="section-kicker">NA ŻYWO</span><h2 id="naglowek-aktywnosci">Teraz się dzieje</h2></div><Link className="text-link" to="/tresci">Cały feed <Icon name="arrow" size={15}/></Link></div><div className="activity-list">{aktywnosci.map(({ikona,kolor,tresc,czas}) => <div key={czas}><span className={`activity-icon ${kolor}`}><Icon name={ikona} size={15}/></span><p>{tresc}<small>{czas}</small></p></div>)}</div></section>;
+  return <section className="activity-panel" aria-labelledby="naglowek-aktywnosci"><div className="compact-heading"><div><span className="section-kicker">NA ŻYWO</span><h2 id="naglowek-aktywnosci">Teraz się dzieje</h2></div><Link className="text-link" to="/tresci">Cały feed <Icon name="arrow" size={15}/></Link></div><div className="activity-list">{aktywnosci.map(({ikona,kolor,przed,wyroznienie,po,czas}) => <div key={czas}><span className={`activity-icon ${kolor}`}><Icon name={ikona} size={15}/></span><p>{przed}{wyroznienie && <b>{wyroznienie}</b>}{po}<small>{czas}</small></p></div>)}</div></section>;
 }
 
 export function KartaGlosowania() {
