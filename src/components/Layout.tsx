@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
+import { KomunikatFunkcji } from './FeatureNotice';
 import { Icon } from './Icons';
 
 const nawigacjaGlowna = [
@@ -49,7 +50,7 @@ export function Layout() {
         <NavLink className="sidebar-add" to="/dodaj-pomysl"><Icon name="plus" size={18}/><span>Dodaj pomysł</span></NavLink>
         <div className="sidebar-social" aria-label="Media społecznościowe"><a href="https://www.youtube.com" aria-label="YouTube"><span>YT</span></a><a href="https://www.github.com" aria-label="GitHub"><span>GH</span></a><NavLink to="/kontakt" aria-label="Kontakt"><Icon name="mail" size={15}/></NavLink></div>
         <button className="theme-switch" onClick={zmienMotyw} aria-label={`Zmień motyw. Obecnie: ${etykietaMotywu}`}><Icon name={motyw === 'dark' ? 'moon' : 'sun'} size={17}/><span>Motyw: {etykietaMotywu}</span></button>
-        <button className="sidebar-profile" type="button" aria-label="Otwórz profil użytkownika"><span className="profile-avatar">K</span><span className="profile-copy"><b>Gość</b><small>Zaloguj się do konta</small></span><Icon name="arrow" size={15}/></button>
+        <KomunikatFunkcji klasaKontenera="komunikat-funkcji--boczny" klasaPrzycisku="sidebar-profile" etykieta="Informacja o koncie użytkownika" tytul="Konto użytkownika" opis="Logowanie i pełny profil są w przygotowaniu. Docelowo pozwolą zarządzać zapisanymi projektami i aktywnością."><span className="profile-avatar">K</span><span className="profile-copy"><b>Gość</b><small>Zaloguj się do konta</small></span><Icon name="arrow" size={15}/></KomunikatFunkcji>
         <div className="mini-status"><span className="pulse-dot"/> Po Kapiemu · beta</div>
       </div>
     </aside>
@@ -57,8 +58,8 @@ export function Layout() {
     <main className="main-area">
       <header className="topbar">
         <div className="topbar-view"><span>Widok</span><button className={widokKompaktowy ? 'active' : ''} onClick={() => ustawWidokKompaktowy(true)}>Kompaktowy</button><button className={widokKompaktowy ? '' : 'active'} onClick={() => ustawWidokKompaktowy(false)}>Pełny</button></div>
-        <label className="topbar-search"><Icon name="search" size={16}/><input placeholder="Szukaj projektów, pomysłów…" aria-label="Szukaj projektów i pomysłów"/></label>
-        <div className="topbar-actions"><NavLink className="button primary compact topbar-add" to="/dodaj-pomysl"><Icon name="plus" size={16}/><span>Dodaj pomysł</span></NavLink><button className="topbar-theme" aria-label="Powiadomienia"><Icon name="bell" size={17}/></button><button className="topbar-theme" onClick={zmienMotyw} aria-label={`Zmień motyw. Obecnie: ${etykietaMotywu}`}><Icon name={motyw === 'dark' ? 'moon' : 'sun'} size={17}/></button><details className="account-menu-wrap"><summary className="account-button"><Icon name="user" size={16}/><span>Konto</span></summary><nav className="account-menu" aria-label="Menu konta"><NavLink to="/moje-projekty">Moje projekty</NavLink><NavLink to="/obserwowane">Obserwowane</NavLink><NavLink to="/zapisane">Zapisane</NavLink><NavLink to="/moja-aktywnosc">Moja aktywność</NavLink></nav></details></div>
+        <KomunikatFunkcji klasaKontenera="komunikat-funkcji--wyszukiwanie" klasaPrzycisku="topbar-search" etykieta="Informacja o wyszukiwaniu" tytul="Wyszukiwanie" opis="Wyszukiwanie projektów, pomysłów i treści jest w przygotowaniu."><Icon name="search" size={16}/><span>Szukaj projektów, pomysłów…</span></KomunikatFunkcji>
+        <div className="topbar-actions"><NavLink className="button primary compact topbar-add" to="/dodaj-pomysl"><Icon name="plus" size={16}/><span>Dodaj pomysł</span></NavLink><KomunikatFunkcji klasaPrzycisku="topbar-theme" etykieta="Informacja o powiadomieniach" tytul="Powiadomienia" opis="Centrum powiadomień jest w przygotowaniu. Będzie zbierać ważne zmiany w projektach i aktywność."><Icon name="bell" size={17}/></KomunikatFunkcji><button className="topbar-theme" onClick={zmienMotyw} aria-label={`Zmień motyw. Obecnie: ${etykietaMotywu}`}><Icon name={motyw === 'dark' ? 'moon' : 'sun'} size={17}/></button><details className="account-menu-wrap"><summary className="account-button"><Icon name="user" size={16}/><span>Konto</span></summary><nav className="account-menu" aria-label="Menu konta"><NavLink to="/moje-projekty">Moje projekty</NavLink><NavLink to="/obserwowane">Obserwowane</NavLink><NavLink to="/zapisane">Zapisane</NavLink><NavLink to="/moja-aktywnosc">Moja aktywność</NavLink></nav></details></div>
       </header>
       <header className="mobile-header"><NavLink to="/" className="mobile-brand"><span className="brand-mark small">PK</span><strong>Po Kapiemu</strong></NavLink><button className="icon-button" onClick={() => ustawMenuMobilneOtwarte(!menuMobilneOtwarte)} aria-label={menuMobilneOtwarte ? 'Zamknij menu' : 'Otwórz menu'}><Icon name="menu"/></button></header>
       <Outlet/>

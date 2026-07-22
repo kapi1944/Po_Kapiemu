@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { aktywnosci, contentItems, etykietyTypowMaterialowRecenzenckich, poll, projects, reviews, type ProjectStatus } from '../data/siteData';
 import { Icon } from './Icons';
+import { KomunikatFunkcji } from './FeatureNotice';
 
 const grupyStatusow: Array<{ etykieta:string; statusy:ProjectStatus[]; kolor:string }> = [
   { etykieta:'W realizacji', statusy:['W trakcie','Testy','Aktywny'], kolor:'var(--technical)' },
@@ -31,7 +32,7 @@ export function FeedAktywnosci() {
 
 export function KartaGlosowania() {
   const liczbaGlosow = poll.options.reduce((suma, opcja) => suma + opcja.votes, 0);
-  return <section className="poll-card feature-card" aria-labelledby="naglowek-glosowania"><div className="card-topline"><span className="tag hot">AKTYWNE GŁOSOWANIE</span><span className="binding">Niewiążące</span></div><h2 id="naglowek-glosowania">{poll.question}</h2><p>Wybór społeczności pomaga ustalić kolejność pracy.</p><div className="poll-options">{poll.options.map((opcja, indeks) => { const procent = Math.round(opcja.votes / liczbaGlosow * 100); return <button className={`poll-result category-${opcja.category}`} key={opcja.label}><span className="poll-result-head"><span className="poll-letter">{String.fromCharCode(65 + indeks)}</span><span>{opcja.label}</span><b>{procent}%</b></span><span className="poll-result-track"><span style={{width:`${procent}%`}}/></span></button>; })}</div><div className="poll-footer"><span>{liczbaGlosow} głosów</span><Link to="/glosowania">Zagłosuj <Icon name="arrow" size={15}/></Link></div></section>;
+  return <section className="poll-card feature-card" aria-labelledby="naglowek-glosowania"><div className="card-topline"><span className="tag hot">AKTYWNE GŁOSOWANIE</span><span className="binding">Niewiążące</span></div><h2 id="naglowek-glosowania">{poll.question}</h2><p>Wybór społeczności pomaga ustalić kolejność pracy.</p><div className="poll-options">{poll.options.map((opcja, indeks) => { const procent = Math.round(opcja.votes / liczbaGlosow * 100); return <KomunikatFunkcji key={opcja.label} klasaKontenera="komunikat-funkcji--pelna-szerokosc" klasaPrzycisku={`poll-result category-${opcja.category}`} etykieta={`Informacja o głosowaniu: ${opcja.label}`} tytul="Głosowanie na dashboardzie" opis="Oddanie głosu jest dostępne w module Głosowania. Ten widok pokazuje aktualne wyniki."><span className="poll-result-head"><span className="poll-letter">{String.fromCharCode(65 + indeks)}</span><span>{opcja.label}</span><b>{procent}%</b></span><span className="poll-result-track"><span style={{width:`${procent}%`}}/></span></KomunikatFunkcji>; })}</div><div className="poll-footer"><span>{liczbaGlosow} głosów</span><Link to="/glosowania">Zagłosuj <Icon name="arrow" size={15}/></Link></div></section>;
 }
 
 export function ModulyDashboardu() {
