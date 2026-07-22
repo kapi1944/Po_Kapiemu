@@ -1,6 +1,15 @@
 export type StatusTresci = 'idea' | 'draft' | 'scheduled' | 'ready' | 'published';
 export type TypTresci = 'project' | 'update' | 'video' | 'article' | 'review' | 'test' | 'comparison' | 'material';
 export type DostepTresci = 'public' | 'registered' | 'supporters';
+export type StatusPublikacjiPlatformy = 'scheduled' | 'published';
+
+export type PublikacjaPlatformowa = {
+  id: string;
+  nazwaPlatformy: string;
+  zaplanowanoNa?: string;
+  opublikowanoNa?: string;
+  status: StatusPublikacjiPlatformy;
+};
 
 export type Tresc = {
   id: string;
@@ -15,6 +24,10 @@ export type Tresc = {
   access: DostepTresci;
   image?: string;
   tags?: string[];
+  projectSlugs?: string[];
+  primaryCategory?: ProjectCategory;
+  secondaryCategories?: ProjectCategory[];
+  publications?: PublikacjaPlatformowa[];
 };
 
 export const etykietyStatusowTresci: Record<StatusTresci, string> = {
