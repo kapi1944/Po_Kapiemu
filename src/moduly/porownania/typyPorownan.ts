@@ -1,3 +1,12 @@
+export type EtykietaRekomendacjiProduktu = 'best-quality' | 'best-value' | 'best-phone' | 'budget';
+
+export const etykietyRekomendacjiProduktow: Record<EtykietaRekomendacjiProduktu, string> = {
+  'best-quality': 'Najlepsza jakość',
+  'best-value': 'Najlepszy stosunek ceny do jakości',
+  'best-phone': 'Najlepszy do telefonu',
+  budget: 'Budżetowy wybór',
+};
+
 export type CenaProduktu = {
   kwota: number;
   waluta: string;
@@ -12,6 +21,7 @@ export type ProduktPorownania<TParametry> = {
   ocena: number | null;
   miniatura: string | null;
   werdykt: string | null;
+  rekomendacje: EtykietaRekomendacjiProduktu[];
   dlaKogo: string | null;
   dlaKogoNie: string | null;
   parametry: TParametry;

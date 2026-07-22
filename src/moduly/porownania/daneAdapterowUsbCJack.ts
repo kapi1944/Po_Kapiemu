@@ -10,6 +10,7 @@ export const adapteryUsbCJack: AdapterUsbCJack[] = [
     ocena: 8.8,
     miniatura: null,
     werdykt: 'Mały DAC z dużym zapasem mocy.',
+    rekomendacje: [],
     dlaKogo: null,
     dlaKogoNie: null,
     parametry: {
