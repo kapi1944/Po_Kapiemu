@@ -1,3 +1,4 @@
+import { porownanieAdapterowUsbCJack } from '../porownania/daneAdapterowUsbCJack';
 import { contentItems, etykietyTypowMaterialowRecenzenckich, etykietyTypowTresci, nazwyKategorii, projects, reviews, type TypMaterialuRecenzenckiego, type TypTresci } from '../../data/siteData';
 
 export type TypWynikuWyszukiwania = 'project' | TypTresci;
@@ -53,8 +54,12 @@ function utworzWynikiMaterialowRecenzenckich(): WynikWyszukiwania[] {
   }));
 }
 
+function utworzWynikiPorownan(): WynikWyszukiwania[] {
+  return [{ id: 'comparison-' + porownanieAdapterowUsbCJack.id, typ: 'comparison', tytul: porownanieAdapterowUsbCJack.nazwa, opis: porownanieAdapterowUsbCJack.opis, url: '/porownania/' + porownanieAdapterowUsbCJack.slug, tagi: ['Adaptery', 'DAC', 'USB-C', 'jack 3,5 mm'] }];
+}
+
 export function pobierzWynikiWyszukiwania(): WynikWyszukiwania[] {
-  return [...utworzWynikiProjektow(), ...utworzWynikiTresci(), ...utworzWynikiMaterialowRecenzenckich()];
+  return [...utworzWynikiProjektow(), ...utworzWynikiTresci(), ...utworzWynikiMaterialowRecenzenckich(), ...utworzWynikiPorownan()];
 }
 
 export function wyszukaj(tekst: string, wyniki = pobierzWynikiWyszukiwania()): WynikWyszukiwania[] {
