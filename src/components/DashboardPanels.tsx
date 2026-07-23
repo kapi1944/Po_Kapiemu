@@ -4,6 +4,8 @@ import { BlokadaDlaGoscia, LIMIT_KART_DLA_GOSCIA } from './GuestLock';
 import { Icon } from './Icons';
 import { KomunikatFunkcji } from './FeatureNotice';
 
+const LIMIT_RECENZJI_DLA_GOSCIA = 2;
+
 const grupyStatusow: Array<{ etykieta:string; statusy:ProjectStatus[]; kolor:string }> = [
   { etykieta:'W realizacji', statusy:['W trakcie','Testy','Aktywny'], kolor:'var(--technical)' },
   { etykieta:'W planach', statusy:['Pomysł','Planowanie'], kolor:'var(--blocks)' },
@@ -60,30 +62,87 @@ export function SekcjaPublikacji({ czyZalogowany = false }: { czyZalogowany?: bo
 }
 
 export function SekcjaRecenzji({ czyZalogowany = false }: { czyZalogowany?: boolean }) {
-  const kartyRecenzji = reviews.map((recenzja, indeks) => {
-    const karta = <article className="review-card" key={recenzja.title}><div className={`review-thumb review-thumb-${indeks + 1}`} aria-hidden="true"><i/><i/><i/></div><div className="review-copy"><span>{etykietyTypowMaterialowRecenzenckich[recenzja.typ]}</span><h3>{recenzja.title}</h3><p>{recenzja.verdict}</p></div><div className="score"><strong>{recenzja.score}</strong><small>/10</small></div></article>;
-    const zablokowanaDlaGoscia = !czyZalogowany && indeks >= LIMIT_KART_DLA_GOSCIA;
-    if (!zablokowanaDlaGoscia) return karta;
+  const widoczneRecenzje = czyZalogowany
+    ? reviews
+    : reviews.slice(0, LIMIT_RECENZJI_DLA_GOSCIA);
 
-    return <div className="guest-lock-shell guest-lock-shell--review" key={recenzja.title}>
-      <div className="guest-lock-shell__content" inert aria-hidden="true">{karta}</div>
-      <BlokadaDlaGoscia kompaktowa tytul="Więcej testów po zalogowaniu" opis="Zaloguj się, aby zobaczyć kolejne recenzje, testy i porównania."/>
-    </div>;
-  });
+  return <section className="section-block reviews-section">
+    <div className="section-head">
+      <div>
+        <span className="section-kicker">SPRAWDZONE PO KAPIEMU</span>
+        <h2>Recenzje, testy i porównania</h2>
+        <p>Wyróżnione materiały z konkretnym werdyktem.</p>
+      </div>
 
-  if (!czyZalogowany && reviews.length <= LIMIT_KART_DLA_GOSCIA) {
-    kartyRecenzji.push(
-      <div className="guest-lock-shell guest-lock-shell--review guest-lock-shell--teaser" key="kolejna-recenzja-dla-zalogowanych">
-        <div className="guest-lock-shell__content" inert aria-hidden="true">
-          <article className="review-card guest-lock-review-teaser">
-            <div className="guest-lock-review-teaser__thumb" aria-hidden="true"><i/><i/><i/></div>
-            <div className="guest-lock-review-teaser__copy" aria-hidden="true"><span/><strong/><small/></div>
-          </article>
+      <Link className="text-link desktop-link" to="/recenzje">
+        Zobacz wszystkie <Icon name="arrow" size={16}/>
+      </Link>
+    </div>
+
+    <div className="reviews-grid">
+      {widoczneRecenzje.map((recenzja, indeks) =>
+        <article className="review-card" key={recenzja.title}>
+          <div
+            className={`review-thumb review-thumb-${indeks + 1}`}
+            aria-hidden="true"
+          >
+            <i/><i/><i/>
+          </div>
+
+          <div className="review-copy">
+            <span>{etykietyTypowMaterialowRecenzenckich[recenzja.typ]}</span>
+            <h3>{recenzja.title}</h3>
+            <p>{recenzja.verdict}</p>
+          </div>
+
+          <div className="score">
+            <strong>{recenzja.score}</strong>
+            <small>/10</small>
+          </div>
+        </article>
+      )}
+
+      {!czyZalogowany &&
+        <div className="guest-lock-shell guest-lock-shell--review">
+          <div
+            className="guest-lock-shell__content"
+            inert
+            aria-hidden="true"
+          >
+            <article className="review-card">
+              <div
+                className="review-thumb guest-lock-review-thumb"
+                aria-hidden="true"
+              >
+                <i/><i/><i/>
+              </div>
+
+              <div
+                className="review-copy guest-lock-review-copy"
+                aria-hidden="true"
+              >
+                <span>Recenzja</span>
+                <h3>Ukryty materiał</h3>
+                <p>Dalsza zawartość dostępna po zalogowaniu.</p>
+              </div>
+
+              <div
+                className="score guest-lock-review-score"
+                aria-hidden="true"
+              >
+                <strong>–</strong>
+                <small>/10</small>
+              </div>
+            </article>
+          </div>
+
+          <BlokadaDlaGoscia
+            kompaktowa
+            tytul="Więcej testów po zalogowaniu"
+            opis="Zaloguj się, aby zobaczyć kolejne recenzje, testy i porównania."
+          />
         </div>
-        <BlokadaDlaGoscia kompaktowa tytul="Więcej testów po zalogowaniu" opis="Zaloguj się, aby zobaczyć kolejne recenzje, testy i porównania."/>
-      </div>,
-    );
-  }
-
-  return <section className="section-block reviews-section"><div className="section-head"><div><span className="section-kicker">SPRAWDZONE PO KAPIEMU</span><h2>Recenzje, testy i porównania</h2><p>Wyróżnione materiały z konkretnym werdyktem.</p></div><Link className="text-link desktop-link" to="/recenzje">Zobacz wszystkie <Icon name="arrow" size={16}/></Link></div><div className="reviews-grid">{kartyRecenzji}</div></section>;
+      }
+    </div>
+  </section>;
 }

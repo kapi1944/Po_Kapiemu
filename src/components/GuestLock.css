@@ -117,3 +117,45 @@
   .guest-lock-overlay > span:last-child { max-width: 240px; }
   .reviews-section .guest-lock-shell--review { min-width: 86%; scroll-snap-align: start; }
 }
+
+
+/* Recenzje dla gościa: 2 publiczne + neutralna karta nr 3 */
+.guest-lock-shell--review {
+  min-height: 230px;
+  border-radius: 14px;
+}
+
+.guest-lock-shell--review .review-card {
+  height: 100%;
+}
+
+.reviews-section .guest-lock-review-thumb {
+  background:
+    radial-gradient(
+      circle at 70% 30%,
+      color-mix(in srgb,var(--brand) 10%,transparent),
+      transparent 34%
+    ),
+    linear-gradient(145deg,var(--panel-elevated),var(--section));
+}
+
+.reviews-section .guest-lock-review-thumb i {
+  border: 0 !important;
+  background: var(--strong-line) !important;
+  box-shadow: none !important;
+}
+
+.reviews-section .guest-lock-review-copy {
+  opacity: .72;
+}
+
+.reviews-section .guest-lock-review-score {
+  opacity: .55;
+}
+
+@media (max-width: 700px) {
+  .reviews-section .guest-lock-shell--review {
+    min-width: 86%;
+    scroll-snap-align: start;
+  }
+}
