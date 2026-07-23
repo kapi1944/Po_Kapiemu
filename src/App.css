@@ -123,6 +123,7 @@
 /* Projekty */
 .projects-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 16px; }
 .project-card { position: relative; display: flex; min-width: 0; min-height: 390px; overflow: hidden; flex-direction: column; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); box-shadow: 0 8px 20px rgba(0,0,0,.08); transition: transform 180ms ease-out,border-color 180ms ease-out,box-shadow 180ms ease-out; }
+.project-card:not(.locked) { cursor: pointer; }
 .project-card:hover { transform: translateY(-2px) scale(1.018); border-color: var(--category-color); box-shadow: 0 18px 36px color-mix(in srgb,var(--category-color) 22%,transparent),0 0 28px color-mix(in srgb,var(--category-color) 12%,transparent); }
 .category-technical { --category-color: var(--technical); --category-strong: var(--technical-strong); --category-subtle: var(--technical-subtle); }
 .category-music { --category-color: var(--music); --category-strong: var(--music-strong); --category-subtle: var(--music-subtle); }
@@ -138,12 +139,13 @@
 .project-visual-meta { position: absolute; z-index: 1; top: 12px; left: 12px; display: flex; align-items: center; gap: 6px; }
 .status-chip, .project-visual .category-badge { border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 5px 8px; background: rgba(8,11,16,.76); color: #f4f6f8; font-size: 8px; font-weight: 850; }
 .project-visual .category-badge { background: color-mix(in srgb,var(--category-color) 76%,#0b1016); color: #fff; }
-.bookmark-button { position: absolute; z-index: 1; top: 11px; right: 11px; display: grid; width: 32px; height: 32px; place-items: center; border: 1px solid rgba(255,255,255,.16); border-radius: 50%; background: rgba(8,11,16,.76); color: #f4f6f8; }
+.bookmark-button { position: absolute; z-index: 3; top: 11px; right: 11px; display: grid; width: 32px; height: 32px; place-items: center; border: 1px solid rgba(255,255,255,.16); border-radius: 50%; background: rgba(8,11,16,.76); color: #f4f6f8; }
 .bookmark-button:hover, .bookmark-button[aria-pressed="true"] { border-color: var(--category-strong); background: var(--category-color); color: #fff; box-shadow: 0 0 18px color-mix(in srgb,var(--category-color) 42%,transparent); }
 .project-card.locked { opacity: .78; }
 .project-card-body { display: flex; flex: 1; flex-direction: column; padding: 18px; }
 .project-card h3 { margin: 0 0 7px; font-size: 19px; letter-spacing: -.04em; line-height: 1.12; }
 .project-card h3 a { color: inherit; }
+.project-card h3 a::after { position: absolute; z-index: 2; inset: 0; content: ""; }
 .project-card h3 a:hover { color: var(--category-strong); }
 .project-card p { display: -webkit-box; overflow: hidden; margin: 0; color: var(--muted); font-size: 11px; line-height: 1.5; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .project-progress-label { display: flex; justify-content: space-between; margin-top: auto; padding-top: 18px; color: var(--muted); font-size: 9px; font-weight: 750; }
