@@ -1,0 +1,12 @@
+diff --git a/src/App.tsx b/src/App.tsx
+index 8bcb04a..f8de620 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -12,6 +12,7 @@ import { ContentDetailPage } from './pages/ContentDetailPage';
+ import { ReviewDetailPage } from './pages/ReviewDetailPage';
+ import './App.css';
+ import './routes.css';
++import './readability.css';
+ 
+ export default function App() {
+   return <BrowserRouter><Routes><Route element={<Layout/>}>

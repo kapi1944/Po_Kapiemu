@@ -1,0 +1,115 @@
+diff --git a/src/pages/HomePage.tsx b/src/pages/HomePage.tsx
+--- a/src/pages/HomePage.tsx
++++ b/src/pages/HomePage.tsx
+@@ -27,7 +27,7 @@
+       if (!zablokowanyDlaGoscia) return <ProjectCard key={projekt.slug} project={projekt}/>;
+       return <div className="guest-lock-shell guest-lock-shell--project" key={projekt.slug}>
+         <div className="guest-lock-shell__content" inert aria-hidden="true"><ProjectCard project={projekt}/></div>
+-        <BlokadaDlaGoscia tytul="Więcej projektów po zalogowaniu" opis="Zaloguj się, aby zobaczyć kolejne projekty i ich pełny status."/>
++        <BlokadaDlaGoscia kompaktowa tytul="Więcej projektów po zalogowaniu" opis="Zaloguj się, aby zobaczyć kolejne projekty i ich pełny status."/>
+       </div>;
+     })}</div><div className="section-more"><Link to="/projekty">Zobacz wszystkie projekty <Icon name="arrow" size={16}/></Link></div></section>
+     <section className="dashboard-row"><FeedAktywnosci/><KartaGlosowania/></section><ModulyDashboardu czyZalogowany={CZY_UZYTKOWNIK_ZALOGOWANY}/><SekcjaPublikacji czyZalogowany={CZY_UZYTKOWNIK_ZALOGOWANY}/><SekcjaRecenzji czyZalogowany={CZY_UZYTKOWNIK_ZALOGOWANY}/>
+diff --git a/src/components/DashboardPanels.tsx b/src/components/DashboardPanels.tsx
+--- a/src/components/DashboardPanels.tsx
++++ b/src/components/DashboardPanels.tsx
+@@ -60,5 +60,30 @@
+ }
+ 
+ export function SekcjaRecenzji({ czyZalogowany = false }: { czyZalogowany?: boolean }) {
+-  return <section className="section-block reviews-section"><div className="section-head"><div><span className="section-kicker">SPRAWDZONE PO KAPIEMU</span><h2>Recenzje, testy i porównania</h2><p>Wyróżnione materiały z konkretnym werdyktem.</p></div><Link className="text-link desktop-link" to="/recenzje">Zobacz wszystkie <Icon name="arrow" size={16}/></Link></div><div className="reviews-grid">{reviews.map((recenzja,indeks) => <article className={`review-card ${!czyZalogowany && indeks === reviews.length - 1 ? 'locked-review' : ''}`} key={recenzja.title}><div className={`review-thumb review-thumb-${indeks + 1}`} aria-hidden="true"><i/><i/><i/></div><div className="review-copy"><span>{etykietyTypowMaterialowRecenzenckich[recenzja.typ]}</span><h3>{recenzja.title}</h3><p>{recenzja.verdict}</p></div><div className="score"><strong>{recenzja.score}</strong><small>/10</small></div></article>)}</div></section>;
++  const kartyRecenzji = reviews.map((recenzja, indeks) => {
++    const karta = <article className="review-card" key={recenzja.title}><div className={`review-thumb review-thumb-${indeks + 1}`} aria-hidden="true"><i/><i/><i/></div><div className="review-copy"><span>{etykietyTypowMaterialowRecenzenckich[recenzja.typ]}</span><h3>{recenzja.title}</h3><p>{recenzja.verdict}</p></div><div className="score"><strong>{recenzja.score}</strong><small>/10</small></div></article>;
++    const zablokowanaDlaGoscia = !czyZalogowany && indeks >= LIMIT_KART_DLA_GOSCIA;
++    if (!zablokowanaDlaGoscia) return karta;
++
++    return <div className="guest-lock-shell guest-lock-shell--review" key={recenzja.title}>
++      <div className="guest-lock-shell__content" inert aria-hidden="true">{karta}</div>
++      <BlokadaDlaGoscia kompaktowa tytul="Więcej testów po zalogowaniu" opis="Zaloguj się, aby zobaczyć kolejne recenzje, testy i porównania."/>
++    </div>;
++  });
++
++  if (!czyZalogowany && reviews.length <= LIMIT_KART_DLA_GOSCIA) {
++    kartyRecenzji.push(
++      <div className="guest-lock-shell guest-lock-shell--review guest-lock-shell--teaser" key="kolejna-recenzja-dla-zalogowanych">
++        <div className="guest-lock-shell__content" inert aria-hidden="true">
++          <article className="review-card guest-lock-review-teaser">
++            <div className="guest-lock-review-teaser__thumb" aria-hidden="true"><i/><i/><i/></div>
++            <div className="guest-lock-review-teaser__copy" aria-hidden="true"><span/><strong/><small/></div>
++          </article>
++        </div>
++        <BlokadaDlaGoscia kompaktowa tytul="Więcej testów po zalogowaniu" opis="Zaloguj się, aby zobaczyć kolejne recenzje, testy i porównania."/>
++      </div>,
++    );
++  }
++
++  return <section className="section-block reviews-section"><div className="section-head"><div><span className="section-kicker">SPRAWDZONE PO KAPIEMU</span><h2>Recenzje, testy i porównania</h2><p>Wyróżnione materiały z konkretnym werdyktem.</p></div><Link className="text-link desktop-link" to="/recenzje">Zobacz wszystkie <Icon name="arrow" size={16}/></Link></div><div className="reviews-grid">{kartyRecenzji}</div></section>;
+ }
+diff --git a/src/components/GuestLock.css b/src/components/GuestLock.css
+--- a/src/components/GuestLock.css
++++ b/src/components/GuestLock.css
+@@ -6,6 +6,7 @@
+ }
+ 
+ .guest-lock-shell--project { border-radius: 16px; }
++.guest-lock-shell--review { border-radius: 14px; }
+ .guest-lock-shell--content,
+ .guest-lock-shell--module { border-radius: 11px; }
+ 
+@@ -18,9 +19,49 @@
+ }
+ 
+ .guest-lock-shell--project .project-card,
+-.guest-lock-shell--content .content-card {
++.guest-lock-shell--content .content-card,
++.guest-lock-shell--review .review-card {
+   height: 100%;
+ }
++
++.guest-lock-shell--teaser { min-height: 230px; }
++.guest-lock-review-teaser {
++  display: grid;
++  min-height: 230px;
++  grid-template-rows: 148px 1fr;
++  padding: 0;
++}
++.guest-lock-review-teaser__thumb {
++  position: relative;
++  background: linear-gradient(145deg,var(--panel-elevated),var(--section));
++}
++.guest-lock-review-teaser__thumb i {
++  position: absolute;
++  left: 18%;
++  display: block;
++  height: 6px;
++  border-radius: 999px;
++  background: var(--brand);
++}
++.guest-lock-review-teaser__thumb i:nth-child(1) { top: 44px; width: 46%; }
++.guest-lock-review-teaser__thumb i:nth-child(2) { top: 67px; width: 31%; background: var(--experimental-strong); }
++.guest-lock-review-teaser__thumb i:nth-child(3) { top: 90px; width: 20%; background: var(--technical-strong); }
++.guest-lock-review-teaser__copy {
++  display: grid;
++  align-content: center;
++  gap: 8px;
++  padding: 14px;
++}
++.guest-lock-review-teaser__copy span,
++.guest-lock-review-teaser__copy strong,
++.guest-lock-review-teaser__copy small {
++  display: block;
++  border-radius: 999px;
++  background: var(--strong-line);
++}
++.guest-lock-review-teaser__copy span { width: 54px; height: 8px; }
++.guest-lock-review-teaser__copy strong { width: 58%; height: 13px; }
++.guest-lock-review-teaser__copy small { width: 76%; height: 8px; }
+ 
+ .guest-lock-overlay {
+   position: absolute;
+@@ -74,4 +115,5 @@
+ @media (max-width: 700px) {
+   .guest-lock-overlay { padding: 18px; }
+   .guest-lock-overlay > span:last-child { max-width: 240px; }
++  .reviews-section .guest-lock-shell--review { min-width: 86%; scroll-snap-align: start; }
+ }
