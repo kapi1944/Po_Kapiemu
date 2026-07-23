@@ -12,6 +12,7 @@ import { ContentDetailPage } from './pages/ContentDetailPage';
 import { ReviewDetailPage } from './pages/ReviewDetailPage';
 import './App.css';
 import './routes.css';
+import './readability.css';
 
 export default function App() {
   return <BrowserRouter><Routes><Route element={<Layout/>}>
