@@ -27,7 +27,7 @@ export function HomePage() {
       if (!zablokowanyDlaGoscia) return <ProjectCard key={projekt.slug} project={projekt}/>;
       return <div className="guest-lock-shell guest-lock-shell--project" key={projekt.slug}>
         <div className="guest-lock-shell__content" inert aria-hidden="true"><ProjectCard project={projekt}/></div>
-        <BlokadaDlaGoscia tytul="Więcej projektów po zalogowaniu" opis="Zaloguj się, aby zobaczyć kolejne projekty i ich pełny status."/>
+        <BlokadaDlaGoscia kompaktowa tytul="Więcej projektów po zalogowaniu" opis="Zaloguj się, aby zobaczyć kolejne projekty i ich pełny status."/>
       </div>;
     })}</div><div className="section-more"><Link to="/projekty">Zobacz wszystkie projekty <Icon name="arrow" size={16}/></Link></div></section>
     <section className="dashboard-row"><FeedAktywnosci/><KartaGlosowania/></section><ModulyDashboardu czyZalogowany={CZY_UZYTKOWNIK_ZALOGOWANY}/><SekcjaPublikacji czyZalogowany={CZY_UZYTKOWNIK_ZALOGOWANY}/><SekcjaRecenzji czyZalogowany={CZY_UZYTKOWNIK_ZALOGOWANY}/>
