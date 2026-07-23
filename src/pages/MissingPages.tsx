@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icons';
+import './MissingPages.css';
 
 const Naglowek = ({ kicker, title, desc }: { kicker:string; title:string; desc:string }) => <div className="page-hero"><span className="section-kicker">{kicker}</span><h1>{title}</h1><p>{desc}</p></div>;
 
@@ -36,7 +37,44 @@ export function AccountPlaceholderPage({ rodzaj }: { rodzaj:keyof typeof opisyWi
 
 export function AddIdeaPage() {
   const [wyslano, ustawWyslano] = useState(false);
-  return <div className="page-wrap inner-page"><Naglowek kicker="DODAJ POMYSŁ" title="Co warto zbudować albo sprawdzić?" desc="Zaproponuj projekt, test lub materiał. Formularz działa lokalnie jako demonstracja przyszłego procesu."/><form className="contact-form wide-card" onSubmit={zdarzenie => { zdarzenie.preventDefault(); ustawWyslano(true); }}><label>Tytuł pomysłu<input required name="tytul" placeholder="Krótka, konkretna nazwa"/></label><label>Kategoria<select name="kategoria"><option>Techniczne</option><option>Muzyczne</option><option>Klockowe</option><option>Eksperymentalne</option></select></label><label>Opis<textarea required name="opis" rows={6} placeholder="Jaki problem rozwiązuje i dlaczego warto się nim zająć?"/></label><button className="button primary" type="submit"><Icon name="plus" size={16}/> Dodaj pomysł</button>{wyslano && <div className="form-success">✓ Pomysł został przyjęty w wersji demonstracyjnej.</div>}</form></div>;
+  const [pliki, ustawPliki] = useState<File[]>([]);
+  const akceptowaneTypyPlikow = 'image/*,.pdf,.doc,.docx,.xls,.xlsx,.csv,.ppt,.pptx,.txt';
+
+  const dodajPliki = (listaPlikow: FileList | null) => {
+    if (!listaPlikow) return;
+    ustawPliki(obecne => {
+      const wynik = [...obecne];
+      for (const plik of Array.from(listaPlikow)) {
+        const juzDodany = wynik.some(obecny => obecny.name === plik.name && obecny.size === plik.size && obecny.lastModified === plik.lastModified);
+        if (!juzDodany) wynik.push(plik);
+      }
+      return wynik;
+    });
+  };
+
+  const usunPlik = (indeks: number) => ustawPliki(obecne => obecne.filter((_, pozycja) => pozycja !== indeks));
+  const formatujRozmiar = (bajty: number) => bajty >= 1024 * 1024 ? `${(bajty / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.ceil(bajty / 1024))} KB`;
+
+  return <div className="page-wrap inner-page">
+    <Naglowek kicker="DODAJ POMYSŁ" title="Co warto zbudować albo sprawdzić?" desc="Zaproponuj projekt, test lub materiał. Formularz działa lokalnie jako demonstracja przyszłego procesu."/>
+    <form className="contact-form wide-card" onSubmit={zdarzenie => { zdarzenie.preventDefault(); ustawWyslano(true); }}>
+      <label>Tytuł pomysłu<input required name="tytul" placeholder="Krótka, konkretna nazwa"/></label>
+      <label>Kategoria<select name="kategoria"><option>Techniczne</option><option>Muzyczne</option><option>Klockowe</option><option>Eksperymentalne</option></select></label>
+      <label>Opis<textarea required name="opis" rows={6} placeholder="Jaki problem rozwiązuje i dlaczego warto się nim zająć?"/></label>
+      <label className="attachment-field">
+        <span className="attachment-label-row"><span>Załączniki</span><small>opcjonalnie</small></span>
+        <span className="attachment-picker">
+          <Icon name="plus" size={18}/>
+          <span><b>Dodaj pliki</b><small>Grafiki, PDF, Word, Excel, CSV, PowerPoint lub TXT</small></span>
+          <input type="file" multiple accept={akceptowaneTypyPlikow} aria-label="Dodaj załączniki do pomysłu" onChange={zdarzenie => { dodajPliki(zdarzenie.currentTarget.files); zdarzenie.currentTarget.value = ''; }}/>
+        </span>
+      </label>
+      {pliki.length > 0 && <div className="attachment-list" aria-live="polite">{pliki.map((plik, indeks) => <div className="attachment-item" key={`${plik.name}-${plik.size}-${plik.lastModified}`}><span><b>{plik.name}</b><small>{formatujRozmiar(plik.size)}</small></span><button type="button" onClick={() => usunPlik(indeks)}>Usuń</button></div>)}</div>}
+      <p className="attachment-demo-note">W wersji demonstracyjnej pliki są wybierane lokalnie i nie są jeszcze wysyłane na serwer.</p>
+      <button className="button primary" type="submit"><Icon name="plus" size={16}/> Dodaj pomysł</button>
+      {wyslano && <div className="form-success">✓ Pomysł został przyjęty w wersji demonstracyjnej.</div>}
+    </form>
+  </div>;
 }
 
 export function NotFoundPage() {
