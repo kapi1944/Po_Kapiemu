@@ -11,6 +11,7 @@ import { useAutoryzacja } from '../moduly/auth/Autoryzacja';
 import { wyznaczUprawnienia } from '../moduly/auth/uprawnienia';
 import './ProjectDetailPage.css';
 import '../components/project/InterakcjeProjektu.css';
+import '../components/project/SekcjeProjektu.css';
 
 export function ProjectDetailPage() {
   const { slug } = useParams();

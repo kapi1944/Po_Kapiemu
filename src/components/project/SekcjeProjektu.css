@@ -1,0 +1,335 @@
+.strona-projektu {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.strona-projektu .project-detail-hero > div,
+.sekcje-projektu__siatka,
+.sekcja-projektu {
+  min-width: 0;
+}
+
+.strona-projektu .project-detail-hero > div > p {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.nawigacja-sekcji-projektu a,
+.selektor-roli,
+.selektor-roli select {
+  font-size: 12px;
+}
+
+.sekcja-projektu :where(p, li) {
+  overflow-wrap: anywhere;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.projektowa-lista-aktualizacji article {
+  display: grid;
+  gap: 7px;
+}
+
+.projektowa-lista-aktualizacji time,
+.projektowa-lista-aktualizacji small,
+.projektowa-lista-aktualizacji p {
+  font-size: 13px;
+}
+
+.aktualizacja-projektu__daty {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 12px;
+}
+
+.aktualizacja-projektu__kamien {
+  width: max-content;
+  max-width: 100%;
+  border-radius: 999px;
+  padding: 3px 7px;
+  background: var(--category-subtle);
+  color: var(--text) !important;
+}
+
+.projektowa-lista-aktualizacji .aktualizacja-projektu__zmiana {
+  border-radius: 7px;
+  padding: 8px;
+  background: var(--panel-2);
+  color: var(--text);
+}
+
+.aktualizacja-projektu__media,
+.media-kroku-instrukcji {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: 8px;
+}
+
+.aktualizacja-projektu__media img,
+.aktualizacja-projektu__media video,
+.media-kroku-instrukcji img,
+.media-kroku-instrukcji video {
+  width: 100%;
+  max-height: 360px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-2);
+  object-fit: contain;
+}
+
+.aktualizacja-projektu__zalaczniki {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.aktualizacja-projektu__zalaczniki a {
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 6px 8px;
+  color: var(--brand-strong);
+  font-size: 12px;
+}
+
+.instrukcja-projektu > p {
+  font-size: 13px;
+}
+
+.wymagania-instrukcji {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+  background: var(--panel-2);
+}
+
+.wymagania-instrukcji h3 {
+  margin: 0 0 7px;
+  font-size: 15px;
+}
+
+.wymagania-instrukcji ul,
+.czesci-koszty ul,
+.lista-dodatkowa-projektu,
+.zmiany-wersji ul {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding-left: 20px;
+}
+
+.instrukcja-projektu > article {
+  gap: 10px;
+  scroll-margin-top: 130px;
+}
+
+.instrukcja-projektu > article > b {
+  font-size: 15px;
+}
+
+.komentarze-kroku {
+  display: grid;
+  gap: 8px;
+  margin-top: 5px;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+
+.komentarze-kroku h4 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.lista-materialow span,
+.lista-materialow small,
+.lista-materialow em,
+.lista-materialow .text-link,
+.dokumentacja-projektu nav a {
+  font-size: 12px;
+}
+
+.czesci-koszty article > ul {
+  padding: 0;
+  list-style: none;
+}
+
+.element-projektu {
+  display: grid;
+  gap: 7px;
+  border-radius: 7px;
+  padding: 8px;
+  background: var(--panel-2);
+}
+
+.element-projektu > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+}
+
+.element-projektu > div > span {
+  border-radius: 999px;
+  padding: 3px 6px;
+  background: var(--category-subtle);
+  color: var(--muted-strong);
+  font-size: 11px;
+}
+
+.zamienniki-elementu {
+  padding-left: 16px !important;
+}
+
+.zamienniki-elementu li {
+  display: grid;
+  gap: 2px;
+}
+
+.zamienniki-elementu small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.repozytorium-projektu,
+.eksperymenty-projektu article {
+  display: grid;
+  gap: 7px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  background: var(--panel-2);
+}
+
+.repozytorium-projektu > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.repozytorium-projektu > div > b {
+  font-size: 16px;
+}
+
+.repozytorium-projektu > div > span {
+  border-radius: 999px;
+  padding: 4px 7px;
+  background: var(--technical-subtle);
+  color: var(--technical-strong);
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.repozytorium-projektu small,
+.eksperymenty-projektu time {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.opis-dodatkowy-projektu {
+  margin: 0;
+}
+
+.faq-projektu {
+  display: grid;
+  gap: 7px;
+}
+
+.faq-projektu details {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 9px 11px;
+  background: var(--panel-2);
+}
+
+.faq-projektu summary {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.faq-projektu p {
+  margin-bottom: 0;
+}
+
+.eksperymenty-projektu {
+  display: grid;
+  gap: 8px;
+}
+
+.eksperymenty-projektu h3 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.wersje-projektu article,
+.projekty-spolecznosci article {
+  padding: 12px;
+}
+
+.wersje-projektu > article > b,
+.projekty-spolecznosci article b {
+  font-size: 15px;
+}
+
+.wersje-projektu small,
+.projekty-spolecznosci small,
+.wersje-projektu p,
+.projekty-spolecznosci p,
+.zmiany-wersji li {
+  font-size: 13px;
+}
+
+.zmiany-wersji {
+  display: grid;
+  gap: 5px;
+  margin-top: 9px;
+}
+
+.sekcje-projektu__siatka .sekcja-projektu:has(.instrukcja-projektu),
+.sekcje-projektu__siatka .sekcja-projektu:has(.projektowa-lista-aktualizacji) {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 768px) {
+  .sekcja-projektu {
+    padding: 14px;
+  }
+
+  .sugestia-dojrzalosci {
+    grid-template-columns: 1fr;
+  }
+
+  .sugestia-dojrzalosci .button {
+    width: 100%;
+  }
+
+  .projekty-spolecznosci article {
+    grid-template-columns: 52px minmax(0, 1fr);
+  }
+
+  .projekty-spolecznosci img {
+    width: 52px;
+    height: 44px;
+  }
+}
+
+@media (max-width: 390px) {
+  .strona-projektu {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .sekcja-projektu {
+    padding: 12px;
+  }
+
+  .nawigacja-sekcji-projektu {
+    margin-right: -12px;
+    margin-left: -12px;
+  }
+
+  .edycja-sekcji {
+    width: 100%;
+  }
+}

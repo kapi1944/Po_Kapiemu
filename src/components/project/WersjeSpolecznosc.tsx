@@ -1,5 +1,33 @@
-﻿import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { projects } from '../../data/siteData';
 import { szczegolyProjektow, type SzczegolyProjektu } from '../../data/projectDetails';
-export function WersjeProjektu({ szczegoly }: { szczegoly:SzczegolyProjektu }) { if (!szczegoly.wersje?.length) return null; return <div className="wersje-projektu">{szczegoly.openSource && <b>Open Source</b>}{szczegoly.wersje.map((wersja, indeks) => <article key={wersja.nazwa}><b>{wersja.nazwa}</b><small>{wersja.data} · {wersja.dojrzalosc}</small><p>{wersja.zmiany.join(' · ')}</p>{indeks > 0 && <p><b>Co zmieniło się względem poprzedniej wersji:</b> {wersja.zmiany.join(', ')}</p>}</article>)}</div>; }
-export function ProjektySpolecznosci({ szczegoly }: { szczegoly:SzczegolyProjektu }) { const relacja = szczegoly.relacja; const rozwiniecia = projects.filter(projekt => szczegolyProjektow[projekt.slug]?.relacja?.projektZrodlowySlug === szczegoly.slug); return <div className="projekty-spolecznosci">{relacja?.projektZrodlowySlug && <p><b>{relacja.typ}</b> projektu <Link className="text-link" to={`/projekty/${relacja.projektZrodlowySlug}`}>oryginalnego</Link>.</p>}{rozwiniecia.length ? <><h3>Znane rozwinięcia</h3>{rozwiniecia.map(projekt => <article key={projekt.slug}>{projekt.image && <img src={projekt.image} alt=""/>}<div><b>{projekt.title}</b><p>{projekt.description}</p><small>{projekt.status} · {szczegolyProjektow[projekt.slug]?.relacja?.typ}</small><Link className="text-link" to={`/projekty/${projekt.slug}`}>Zobacz projekt</Link></div></article>)}</> : <p>Autorski projekt.</p>}</div>; }
+import { czyBezpiecznyAdres } from './logikaMediow';
+import { czyProjektMaSpolecznosc, pobierzRozwinieciaProjektu } from './logikaSpolecznosci';
+
+export function WersjeProjektu({ szczegoly }: { szczegoly:SzczegolyProjektu }) {
+  if (!szczegoly.wersje?.length) return null;
+  return <div className="wersje-projektu">{szczegoly.wersje.map(wersja => <article key={`${wersja.nazwa}-${wersja.data}`}>
+    <b>{wersja.nazwa}</b>
+    <small>{wersja.data} · {wersja.dojrzalosc}</small>
+    {wersja.zmiany.length > 0 && <div className="zmiany-wersji"><b>Zmiany w tej wersji</b><ul>{wersja.zmiany.map(zmiana => <li key={zmiana}>{zmiana}</li>)}</ul></div>}
+    {wersja.changelogUrl && czyBezpiecznyAdres(wersja.changelogUrl) && <a className="text-link" href={wersja.changelogUrl} target="_blank" rel="noreferrer">Pełny changelog</a>}
+  </article>)}</div>;
+}
+
+export function ProjektySpolecznosci({ szczegoly }: { szczegoly:SzczegolyProjektu }) {
+  if (!czyProjektMaSpolecznosc(szczegoly)) return null;
+  const relacja = szczegoly.relacja;
+  const rozwiniecia = pobierzRozwinieciaProjektu(szczegoly.slug);
+  const projektZrodlowy = relacja?.projektZrodlowySlug ? projects.find(projekt => projekt.slug === relacja.projektZrodlowySlug) : undefined;
+
+  return <div className="projekty-spolecznosci">
+    {projektZrodlowy && <p><b>{relacja?.typ}</b> projektu <Link className="text-link" to={`/projekty/${projektZrodlowy.slug}`}>{projektZrodlowy.title}</Link>.</p>}
+    {rozwiniecia.length > 0 && <><h3>Powiązane projekty</h3>{rozwiniecia.map(projekt => {
+      const typRelacji = szczegolyProjektow[projekt.slug]?.relacja?.typ;
+      return <article key={projekt.slug}>
+        {projekt.image && <img src={projekt.image} alt={`Logo projektu ${projekt.title}`}/>}
+        <div><b>{projekt.title}</b><p>{projekt.description}</p><small>{projekt.status}{typRelacji ? ` · ${typRelacji}` : ''}</small><Link className="text-link" to={`/projekty/${projekt.slug}`}>Zobacz projekt</Link></div>
+      </article>;
+    })}</>}
+  </div>;
+}

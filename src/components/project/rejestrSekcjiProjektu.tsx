@@ -4,9 +4,12 @@ import type { Project } from '../../data/siteData';
 import type { Uzytkownik } from '../../moduly/auth/portAutoryzacji';
 import type { UprawnieniaUzytkownika } from '../../moduly/auth/uprawnienia';
 import { Icon } from '../Icons';
+import { AktualizacjeProjektu } from './AktualizacjeProjektu';
 import { GaleriaProjektu } from './GaleriaProjektu';
 import { GlosowanieProjektu } from './GlosowanieProjektu';
 import { KomentarzeProjektu } from './KomentarzeProjektu';
+import { czyProjektMaSpolecznosc } from './logikaSpolecznosci';
+import { FaqProjektu, ListaDodatkowa, NieudaneEksperymentyProjektu, OpisDodatkowy, RepozytoriumProjektu } from './SekcjeDodatkoweProjektu';
 import { CzesciIKoszty, DokumentacjaProjektu, MaterialyProjektu, ZbudujSam } from './ZasobyProjektu';
 import { ProjektySpolecznosci, WersjeProjektu } from './WersjeSpolecznosc';
 
@@ -39,7 +42,7 @@ export function pobierzDostepneSekcje({ projekt, szczegoly, projectSlug, uzytkow
       id:'aktualizacje',
       etykieta:'Aktualizacje',
       warunekWidocznosci:Boolean(szczegoly.aktualizacje?.length),
-      zawartosc:<div className="projektowa-lista-aktualizacji">{szczegoly.aktualizacje?.map(element => <article key={element.id}><time>{element.data}</time>{element.tytul && <h3>{element.tytul}</h3>}<p>{element.tresc}</p></article>)}</div>,
+      zawartosc:<AktualizacjeProjektu szczegoly={szczegoly}/>,
     },
     galeria: {
       id:'galeria',
@@ -69,13 +72,67 @@ export function pobierzDostepneSekcje({ projekt, szczegoly, projectSlug, uzytkow
       id:'zbuduj-sam',
       etykieta:'Zbuduj sam',
       warunekWidocznosci:Boolean(szczegoly.instrukcja),
-      zawartosc:<ZbudujSam szczegoly={szczegoly}/>,
+      zawartosc:<ZbudujSam szczegoly={szczegoly} projectSlug={projectSlug} uzytkownik={uzytkownik} uprawnienia={uprawnienia}/>,
     },
     'czesci-i-koszty': {
       id:'czesci-i-koszty',
       etykieta:'Części i koszty',
       warunekWidocznosci:Boolean(szczegoly.czesci?.length || szczegoly.narzedzia?.length || szczegoly.koszty),
       zawartosc:<CzesciIKoszty szczegoly={szczegoly}/>,
+    },
+    dokumentacja: {
+      id:'dokumentacja',
+      etykieta:'Dokumentacja',
+      warunekWidocznosci:Boolean(szczegoly.dokumentacja?.length),
+      zawartosc:<DokumentacjaProjektu szczegoly={szczegoly}/>,
+    },
+    repozytorium: {
+      id:'repozytorium',
+      etykieta:'Repozytorium',
+      warunekWidocznosci:Boolean(szczegoly.repozytorium),
+      zawartosc:<RepozytoriumProjektu szczegoly={szczegoly}/>,
+    },
+    'dla-kogo': {
+      id:'dla-kogo',
+      etykieta:'Dla kogo',
+      warunekWidocznosci:Boolean(szczegoly.dlaKogo?.trim()),
+      zawartosc:<OpisDodatkowy tresc={szczegoly.dlaKogo}/>,
+    },
+    'dla-kogo-nie': {
+      id:'dla-kogo-nie',
+      etykieta:'Dla kogo nie',
+      warunekWidocznosci:Boolean(szczegoly.dlaKogoNie?.trim()),
+      zawartosc:<OpisDodatkowy tresc={szczegoly.dlaKogoNie}/>,
+    },
+    ograniczenia: {
+      id:'ograniczenia',
+      etykieta:'Ograniczenia',
+      warunekWidocznosci:Boolean(szczegoly.ograniczenia?.length),
+      zawartosc:<ListaDodatkowa elementy={szczegoly.ograniczenia}/>,
+    },
+    faq: {
+      id:'faq',
+      etykieta:'FAQ',
+      warunekWidocznosci:Boolean(szczegoly.faq?.length),
+      zawartosc:<FaqProjektu szczegoly={szczegoly}/>,
+    },
+    lekcje: {
+      id:'lekcje',
+      etykieta:'Lekcje',
+      warunekWidocznosci:Boolean(szczegoly.lekcje?.length),
+      zawartosc:<ListaDodatkowa elementy={szczegoly.lekcje}/>,
+    },
+    decyzje: {
+      id:'decyzje',
+      etykieta:'Decyzje',
+      warunekWidocznosci:Boolean(szczegoly.decyzje?.length),
+      zawartosc:<ListaDodatkowa elementy={szczegoly.decyzje}/>,
+    },
+    eksperymenty: {
+      id:'eksperymenty',
+      etykieta:'Nieudane eksperymenty',
+      warunekWidocznosci:Boolean(szczegoly.nieudaneEksperymenty?.length),
+      zawartosc:<NieudaneEksperymentyProjektu szczegoly={szczegoly}/>,
     },
     wersje: {
       id:'wersje',
@@ -86,14 +143,8 @@ export function pobierzDostepneSekcje({ projekt, szczegoly, projectSlug, uzytkow
     spolecznosc: {
       id:'spolecznosc',
       etykieta:'Społeczność',
-      warunekWidocznosci:true,
+      warunekWidocznosci:czyProjektMaSpolecznosc(szczegoly),
       zawartosc:<ProjektySpolecznosci szczegoly={szczegoly}/>,
-    },
-    dokumentacja: {
-      id:'dokumentacja',
-      etykieta:'Dokumentacja',
-      warunekWidocznosci:Boolean(szczegoly.dokumentacja?.length),
-      zawartosc:<DokumentacjaProjektu szczegoly={szczegoly}/>,
     },
   };
 
