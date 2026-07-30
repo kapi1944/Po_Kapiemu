@@ -1,3 +1,5 @@
+ARCHIWALNY PROMPT — wykonany częściowo. Nie używać jako aktualnej specyfikacji repozytorium.
+
 # Prompt dla Codexa — Po Kapiemu: kompletne wdrożenie nowej podstrony projektu
 
 Pracujesz w aktualnym repozytorium **`kapi1944/Po_Kapiemu`**, na bieżącej gałęzi projektu (docelowo `main`). Nie twórz nowych osobnych gałęzi.
