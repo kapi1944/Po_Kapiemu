@@ -5,19 +5,12 @@ import { szczegolyProjektow } from '../data/projectDetails';
 import { pobierzDostepneSekcje } from '../components/project/rejestrSekcjiProjektu';
 import { RenderowaneSekcjeProjektu } from '../components/project/RenderowaneSekcjeProjektu';
 import { SelektorRoli, useRolaWidza, wyznaczUprawnieniaTestowe } from '../components/project/RolaWidza';
-import { StatusProjektu, SugestiaDojrzalosci } from '../components/project/StatusProjektu';
+import { StatusProjektu } from '../components/project/StatusProjektu';
+import { kluczKolejnosciSekcji, kluczWyroznionychSekcji, pobierzKolejnoscSekcji, pobierzWyroznioneSekcje } from '../components/project/logikaSekcji';
 import { useAutoryzacja } from '../moduly/auth/Autoryzacja';
 import { wyznaczUprawnienia } from '../moduly/auth/uprawnienia';
 import './ProjectDetailPage.css';
-
-function pobierzLokalnaListe(klucz: string, domyslna: string[]) {
-  try {
-    const dane = JSON.parse(localStorage.getItem(klucz) ?? '[]');
-    return Array.isArray(dane) && dane.length ? dane : domyslna;
-  } catch {
-    return domyslna;
-  }
-}
+import '../components/project/InterakcjeProjektu.css';
 
 export function ProjectDetailPage() {
   const { slug } = useParams();
@@ -30,31 +23,38 @@ export function ProjectDetailPage() {
     () => import.meta.env.DEV && nadpisanie ? wyznaczUprawnieniaTestowe(nadpisanie) : uprawnieniaSesji,
     [nadpisanie, uprawnieniaSesji],
   );
-  const bazowe = useMemo(() => projekt ? pobierzDostepneSekcje(projekt, szczegoly, rola) : [], [projekt, szczegoly, rola]);
+  const bazowe = useMemo(() => projekt ? pobierzDostepneSekcje({
+    projekt,
+    szczegoly,
+    projectSlug:projekt.slug,
+    uzytkownik,
+    uprawnienia,
+  }) : [], [projekt, szczegoly, uprawnienia, uzytkownik]);
+  const identyfikatorySekcji = useMemo(() => bazowe.map(element => element.id), [bazowe]);
+  const kluczDostepnychSekcji = identyfikatorySekcji.join('|');
   const [kolejnosc, ustawKolejnosc] = useState<string[]>([]);
   const [wyroznione, ustawWyroznione] = useState<string[]>([]);
   const [przeciagany, ustawPrzeciagany] = useState<string>();
   const [edycja, ustawEdycje] = useState(false);
   const [aktywna, ustawAktywna] = useState('');
-  const [sugestia, ustawSugestie] = useState(true);
 
   useEffect(() => {
     if (!projekt) return;
-    const domyslna = bazowe.map(element => element.id);
-    ustawKolejnosc(pobierzLokalnaListe(`pk-section-order-${projekt.slug}`, domyslna));
-    ustawWyroznione(pobierzLokalnaListe(`pk-section-featured-${projekt.slug}`, szczegoly?.wyroznioneSekcje ?? []));
-  }, [bazowe, projekt, szczegoly?.wyroznioneSekcje]);
+    const domyslnaKolejnosc = szczegoly?.kolejnoscSekcji ?? identyfikatorySekcji;
+    ustawKolejnosc(pobierzKolejnoscSekcji(projekt.slug, identyfikatorySekcji, domyslnaKolejnosc));
+    ustawWyroznione(pobierzWyroznioneSekcje(projekt.slug, identyfikatorySekcji, szczegoly?.wyroznioneSekcje ?? []));
+  }, [identyfikatorySekcji, kluczDostepnychSekcji, projekt, szczegoly?.kolejnoscSekcji, szczegoly?.wyroznioneSekcje]);
 
   const sekcje = useMemo(() => {
     const mapa = new Map(bazowe.map(element => [element.id, element]));
-    return [...kolejnosc, ...bazowe.map(element => element.id)]
+    return [...kolejnosc, ...identyfikatorySekcji]
       .filter((id, indeks, lista) => lista.indexOf(id) === indeks)
       .map(id => mapa.get(id))
       .filter(Boolean) as typeof bazowe;
-  }, [bazowe, kolejnosc]);
+  }, [bazowe, identyfikatorySekcji, kolejnosc]);
 
   useEffect(() => {
-    if (!sekcje.length) return;
+    if (!sekcje.length || typeof IntersectionObserver === 'undefined') return;
     const obserwator = new IntersectionObserver(wpisy => {
       const wpis = wpisy.find(element => element.isIntersecting);
       if (wpis) ustawAktywna(wpis.target.id);
@@ -72,7 +72,7 @@ export function ProjectDetailPage() {
 
   const zapiszKolejnosc = (nowa: string[]) => {
     ustawKolejnosc(nowa);
-    localStorage.setItem(`pk-section-order-${projekt.slug}`, JSON.stringify(nowa));
+    localStorage.setItem(kluczKolejnosciSekcji(projekt.slug), JSON.stringify(nowa));
   };
   const przesun = (id: string, kierunek: -1 | 1) => {
     const indeks = kolejnosc.indexOf(id);
@@ -83,29 +83,28 @@ export function ProjectDetailPage() {
     [nowa[indeks], nowa[docelowy]] = [nowa[docelowy], nowa[indeks]];
     zapiszKolejnosc(nowa);
   };
-  const upusc = (cel: string) => {
+  const upusc = (cel: string, pozycja: 'przed' | 'po') => {
     if (!przeciagany || przeciagany === cel) return;
     const nowa = kolejnosc.filter(id => id !== przeciagany);
-    nowa.splice(Math.max(0, nowa.indexOf(cel)), 0, przeciagany);
+    const indeksCelu = nowa.indexOf(cel);
+    const indeksWstawienia = indeksCelu < 0 ? nowa.length : indeksCelu + (pozycja === 'po' ? 1 : 0);
+    nowa.splice(indeksWstawienia, 0, przeciagany);
     zapiszKolejnosc(nowa);
     ustawPrzeciagany(undefined);
   };
   const zmienWyroznienie = (id: string) => {
     const nowe = wyroznione.includes(id) ? wyroznione.filter(element => element !== id) : [...wyroznione, id];
     ustawWyroznione(nowe);
-    localStorage.setItem(`pk-section-featured-${projekt.slug}`, JSON.stringify(nowe));
+    localStorage.setItem(kluczWyroznionychSekcji(projekt.slug), JSON.stringify(nowe));
   };
 
   return <div className={`page-wrap inner-page strona-projektu category-${projekt.category}`}>
     <SelektorRoli rolaSesji={uprawnieniaSesji.widocznoscProjektu} nadpisanie={nadpisanie} ustawNadpisanie={ustawNadpisanie}/>
     <header className="project-detail-hero">
-      <div><span className="section-kicker">{projekt.eyebrow}</span><h1>{projekt.title}</h1><p>{projekt.description}</p>{szczegoly && <StatusProjektu status={projekt.status} szczegoly={szczegoly} rola={rola}/>}</div>
+      <div><span className="section-kicker">{projekt.eyebrow}</span><h1>{projekt.title}</h1><p>{projekt.description}</p>{szczegoly && <StatusProjektu key={projekt.slug} projekt={projekt} szczegoly={szczegoly} uprawnienia={uprawnienia}/>}</div>
       {projekt.image && <img src={projekt.image} alt=""/>}
     </header>
-    {szczegoly && uprawnienia.mozeEdytowacProjekt && <>
-      <button type="button" className="button secondary compact" aria-pressed={edycja} onClick={() => ustawEdycje(obecna => !obecna)}>{edycja ? 'Zakończ edycję układu' : 'Edytuj układ sekcji'}</button>
-      <SugestiaDojrzalosci szczegoly={szczegoly} aktywna={sugestia} onZastosuj={() => { localStorage.setItem(`pk-dojrzalosc-${projekt.slug}`, 'zaakceptowana'); ustawSugestie(false); }} onOdrzuc={() => { localStorage.setItem(`pk-dojrzalosc-${projekt.slug}`, 'odrzucona'); ustawSugestie(false); }}/>
-    </>}
+    {szczegoly && uprawnienia.mozeEdytowacProjekt && <button type="button" className="button secondary compact" aria-pressed={edycja} onClick={() => ustawEdycje(obecna => !obecna)}>{edycja ? 'Zakończ edycję układu' : 'Edytuj układ sekcji'}</button>}
     {sekcje.length > 0 && <nav className="nawigacja-sekcji-projektu" aria-label="Sekcje projektu">{sekcje.map(sekcja => <a key={sekcja.id} className={aktywna === sekcja.id ? 'aktywna' : ''} href={`#${sekcja.id}`} aria-current={aktywna === sekcja.id ? 'location' : undefined}>{sekcja.etykieta}</a>)}</nav>}
     <RenderowaneSekcjeProjektu sekcje={sekcje} wyroznione={wyroznione} trybEdycji={edycja && uprawnienia.mozeEdytowacProjekt} przesun={przesun} zmienWyroznienie={zmienWyroznienie} rozpocznijPrzeciaganie={ustawPrzeciagany} upusc={upusc}/>
   </div>;

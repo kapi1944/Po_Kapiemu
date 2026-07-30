@@ -8,8 +8,8 @@ const LIMIT_RECENZJI_DLA_GOSCIA = 2;
 
 const grupyStatusow: Array<{ etykieta:string; statusy:ProjectStatus[]; kolor:string }> = [
   { etykieta:'W realizacji', statusy:['Przygotowanie','W realizacji','Testowanie','Dopracowywanie','Rozwijany dalej'], kolor:'var(--technical)' },
-  { etykieta:'W planach', statusy:['\u0050omys\u0142','Planowanie'], kolor:'var(--blocks)' },
-  { etykieta:'Zakończone', statusy:['\u0055ko\u0144czony'], kolor:'var(--experimental)' },
+  { etykieta:'W planach', statusy:['Pomysł','Planowanie'], kolor:'var(--blocks)' },
+  { etykieta:'Zakończone', statusy:['Ukończony'], kolor:'var(--experimental)' },
   { etykieta:'Wstrzymane', statusy:['Wstrzymany'], kolor:'var(--muted)' },
 ];
 
@@ -51,7 +51,7 @@ export function ModulyDashboardu({ czyZalogowany = false }: { czyZalogowany?: bo
 
 export function SekcjaPublikacji({ czyZalogowany = false }: { czyZalogowany?: boolean }) {
   return <section className="section-block"><div className="section-head"><div><span className="section-kicker">NOWE</span><h2>Ostatnio opublikowane</h2><p>Filmy, aktualizacje, artykuły i materiały do pobrania.</p></div><Link className="text-link desktop-link" to="/tresci">Wszystkie treści <Icon name="arrow" size={16}/></Link></div><div className="content-grid">{contentItems.map((material,indeks) => {
-    const karta = <article className="content-card" key={material.title}><div className={`content-thumb thumb-${indeks + 1}`}><span>{material.tag}</span><div className="play-or-doc">{material.type === 'video' ? 'â–¶' : etykietyTypowTresci[material.type][0]}</div></div><div className="content-body"><span>{etykietyTypowTresci[material.type]}</span><h3>{material.title}</h3><p>{material.meta}</p></div></article>;
+    const karta = <article className="content-card" key={material.title}><div className={`content-thumb thumb-${indeks + 1}`}><span>{material.tag}</span><div className="play-or-doc">{material.type === 'video' ? '▶' : etykietyTypowTresci[material.type][0]}</div></div><div className="content-body"><span>{etykietyTypowTresci[material.type]}</span><h3>{material.title}</h3><p>{material.meta}</p></div></article>;
     const zablokowanaDlaGoscia = !czyZalogowany && indeks >= LIMIT_KART_DLA_GOSCIA;
     if (!zablokowanaDlaGoscia) return karta;
     return <div className="guest-lock-shell guest-lock-shell--content" key={material.title}>
@@ -130,7 +130,7 @@ export function SekcjaRecenzji({ czyZalogowany = false }: { czyZalogowany?: bool
                 className="score guest-lock-review-score"
                 aria-hidden="true"
               >
-                <strong>â€“</strong>
+                <strong>–</strong>
                 <small>/10</small>
               </div>
             </article>

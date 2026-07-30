@@ -1,3 +1,26 @@
-﻿import { SekcjaProjektu } from './SekcjaProjektu';
+import { SekcjaProjektu } from './SekcjaProjektu';
 import type { DostepnaSekcja } from './rejestrSekcjiProjektu';
-export function RenderowaneSekcjeProjektu({ sekcje, wyroznione, trybEdycji=false, przesun, zmienWyroznienie, rozpocznijPrzeciaganie, upusc }: { sekcje:DostepnaSekcja[]; wyroznione?:string[]; trybEdycji?:boolean; przesun:(id:string,kierunek:-1|1)=>void; zmienWyroznienie:(id:string)=>void; rozpocznijPrzeciaganie:(id:string)=>void; upusc:(id:string)=>void }) { return <div className="sekcje-projektu__siatka">{sekcje.map((sekcja, indeks) => <SekcjaProjektu key={sekcja.id} id={sekcja.id} tytul={sekcja.etykieta} wyrozniona={wyroznione?.includes(sekcja.id)} trybEdycji={trybEdycji} pierwsza={indeks===0} ostatnia={indeks===sekcje.length-1} przesun={kierunek=>przesun(sekcja.id,kierunek)} zmienWyroznienie={()=>zmienWyroznienie(sekcja.id)} rozpocznijPrzeciaganie={rozpocznijPrzeciaganie} upusc={upusc}>{sekcja.zawartosc}</SekcjaProjektu>)}</div>; }
+
+export function RenderowaneSekcjeProjektu({ sekcje, wyroznione, trybEdycji=false, przesun, zmienWyroznienie, rozpocznijPrzeciaganie, upusc }: {
+  sekcje: DostepnaSekcja[];
+  wyroznione?: string[];
+  trybEdycji?: boolean;
+  przesun: (id:string, kierunek:-1|1) => void;
+  zmienWyroznienie: (id:string) => void;
+  rozpocznijPrzeciaganie: (id:string) => void;
+  upusc: (id:string, pozycja:'przed'|'po') => void;
+}) {
+  return <div className="sekcje-projektu__siatka">{sekcje.map((sekcja, indeks) => <SekcjaProjektu
+    key={sekcja.id}
+    id={sekcja.id}
+    tytul={sekcja.etykieta}
+    wyrozniona={wyroznione?.includes(sekcja.id)}
+    trybEdycji={trybEdycji}
+    pierwsza={indeks === 0}
+    ostatnia={indeks === sekcje.length - 1}
+    przesun={kierunek => przesun(sekcja.id, kierunek)}
+    zmienWyroznienie={() => zmienWyroznienie(sekcja.id)}
+    rozpocznijPrzeciaganie={rozpocznijPrzeciaganie}
+    upusc={upusc}
+  >{sekcja.zawartosc}</SekcjaProjektu>)}</div>;
+}
