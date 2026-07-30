@@ -7,6 +7,7 @@ import { GlosowanieProjektu } from './GlosowanieProjektu';
 import { KomentarzeProjektu } from './KomentarzeProjektu';
 import { CzesciIKoszty, DokumentacjaProjektu, MaterialyProjektu, ZbudujSam } from './ZasobyProjektu';
 import { SekcjaProjektu } from './SekcjaProjektu';
+import { ProjektySpolecznosci, WersjeProjektu } from './WersjeSpolecznosc';
 export type DostepnaSekcja = { id:string; etykieta:string; zawartosc:ReactNode };
 export function pobierzDostepneSekcje(projekt:Project, szczegoly?:SzczegolyProjektu, rola:RolaWidza='guest'):DostepnaSekcja[] { if (!szczegoly) return []; const sekcje:Record<string,DostepnaSekcja|undefined> = {
  najwazniejsze:projekt.highlights.length?{id:'najwazniejsze',etykieta:'Najważniejsze',zawartosc:<ul className="feature-list">{projekt.highlights.map(element=><li key={element}><Icon name="spark" size={15}/>{element}</li>)}</ul>}:undefined,
@@ -17,6 +18,8 @@ export function pobierzDostepneSekcje(projekt:Project, szczegoly?:SzczegolyProje
  materialy:szczegoly.pliki?.length?{id:'materialy',etykieta:'Materiały',zawartosc:<MaterialyProjektu szczegoly={szczegoly} rola={rola}/>} :undefined,
  'zbuduj-sam':szczegoly.instrukcja?{id:'zbuduj-sam',etykieta:'Zbuduj sam',zawartosc:<ZbudujSam szczegoly={szczegoly}/>} :undefined,
  'czesci-i-koszty':(szczegoly.czesci?.length||szczegoly.narzedzia?.length||szczegoly.koszty)?{id:'czesci-i-koszty',etykieta:'Części i koszty',zawartosc:<CzesciIKoszty szczegoly={szczegoly}/>} :undefined,
+ wersje:szczegoly.wersje?.length?{id:'wersje',etykieta:'Wersje',zawartosc:<WersjeProjektu szczegoly={szczegoly}/>} :undefined,
+ spolecznosc:{id:'spolecznosc',etykieta:'Społeczność',zawartosc:<ProjektySpolecznosci szczegoly={szczegoly}/>},
  dokumentacja:szczegoly.dokumentacja?.length?{id:'dokumentacja',etykieta:'Dokumentacja',zawartosc:<DokumentacjaProjektu szczegoly={szczegoly}/>} :undefined,
  }; return (szczegoly.kolejnoscSekcji??Object.keys(sekcje)).map(id=>sekcje[id]).filter((sekcja):sekcja is DostepnaSekcja=>Boolean(sekcja)); }
 export function RenderowaneSekcjeProjektu({sekcje,wyroznione}:{sekcje:DostepnaSekcja[];wyroznione?:string[]}) { return <>{sekcje.map(sekcja=><SekcjaProjektu key={sekcja.id} id={sekcja.id} tytul={sekcja.etykieta} wyrozniona={wyroznione?.includes(sekcja.id)}>{sekcja.zawartosc}</SekcjaProjektu>)}</>; }
