@@ -36,7 +36,8 @@ export const szczegolyProjektow: Record<string, SzczegolyProjektu> = {
     kamieniePosrednie:[{ id:'pierwszy-prototyp', tytul:'Pierwszy prototyp', status:'W realizacji', data:'2026-06-16' }],
     przyszleEtapy:[{ id:'testy-spoleczne', tytul:'Testy społeczności', dostep:'registered', termin:'orientacyjnie sierpień' },{ id:'materialy', tytul:'Materiały dla społeczności', dostep:'supporter', termin:'orientacyjnie wrzesień' }],
     aktualizacje:[{ id:'u1', data:'2026-07-30', tytul:'Karty projektów', tresc:'Powstał modułowy fundament pod szczegółowe historie projektów.', zmiana:'Dodano strukturę sekcji i nawigację.' },{ id:'u2', data:'2026-07-12', tresc:'Doprecyzowano kierunek portalu i rolę głosowań społeczności.' }],
-    kolejnoscSekcji:['najwazniejsze','aktualizacje'], wyroznioneSekcje:['najwazniejsze'],
+    galeria:[{ id:'start', data:'04.06.2026', tytul:'Start portalu', miniatura:'/projekty/po-kapiemu.svg', media:[{ id:'m1', typ:'image', url:'/projekty/po-kapiemu.svg', opis:'Pierwszy widok projektu.' }] },{ id:'karty', data:'30.07.2026', tytul:'Karty projektow', miniatura:'/projekty/po-kapiemu.svg', media:[{ id:'m2', typ:'image', url:'/projekty/po-kapiemu.svg', opis:'Modulowa prezentacja etapow.' }] }],
+    kolejnoscSekcji:['najwazniejsze','aktualizacje','galeria'], wyroznioneSekcje:['najwazniejsze'],
   },
   'asystent-bur': { slug:'asystent-bur', rozpoczecie:'2026-03-12', aktualizacja:'2026-07-29', dojrzalosc:'Wersja testowa', aktualnyEtap:'Testy importu harmonogramów', obserwujacy:46, kamienieGlowne:[{ id:'pomysl', tytul:'Pomysł', status:'Pomysł' },{ id:'realizacja', tytul:'W realizacji', status:'W realizacji' },{ id:'testowanie', tytul:'Testowanie', status:'Testowanie' }], kolejnoscSekcji:['najwazniejsze'] },
 };
