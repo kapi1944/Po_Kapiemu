@@ -5,7 +5,7 @@ import { BlokadaDlaGoscia, LIMIT_KART_DLA_GOSCIA } from '../components/GuestLock
 import { Icon } from '../components/Icons';
 import { ProjectCard } from '../components/ProjectCard';
 import { projects, type ProjectCategory } from '../data/siteData';
-import { useAutoryzacja } from '../moduly/auth/Autoryzacja';
+import { useAutoryzacja } from '../moduly/auth/useAutoryzacja';
 
 type TrybProjektow = 'active' | 'all';
 type FiltrKategorii = 'all' | ProjectCategory;

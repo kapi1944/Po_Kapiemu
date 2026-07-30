@@ -40,7 +40,8 @@ function pobierzUkryteHaslo(etykieta) {
         wartosc = Array.from(wartosc).slice(0, -1).join('');
         return;
       }
-      if (!/[\u0000-\u001f\u007f]/.test(znak)) wartosc += znak;
+      const kodZnaku = znak.codePointAt(0) ?? 0;
+      if (kodZnaku >= 32 && kodZnaku !== 127) wartosc += znak;
     };
 
     process.stdin.on('data', obsluzZnak);

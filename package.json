@@ -7,6 +7,10 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check:encoding": "node scripts/check-encoding.mjs",
+    "check:server": "node --check server/aplikacja.mjs && node --check server/serwer.mjs && node --check server/utworzUzytkownika.mjs",
     "preview": "vite preview",
     "serwer": "node server/serwer.mjs",
     "uzytkownik:utworz": "node server/utworzUzytkownika.mjs"
@@ -25,12 +29,17 @@
     "react-router-dom": "^7.18.1"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^7.0.0",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^24.13.2",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",
+    "jsdom": "^30.0.1",
     "oxlint": "^1.71.0",
+    "supertest": "^7.2.2",
     "typescript": "~6.0.2",
-    "vite": "^8.1.1"
+    "vite": "^8.1.1",
+    "vitest": "^4.1.10"
   }
 }

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icons';
-import { useAutoryzacja } from '../moduly/auth/Autoryzacja';
+import { useAutoryzacja } from '../moduly/auth/useAutoryzacja';
 import './MissingPages.css';
 
 const Naglowek = ({ kicker, title, desc }: { kicker:string; title:string; desc:string }) => <div className="page-hero"><span className="section-kicker">{kicker}</span><h1>{title}</h1><p>{desc}</p></div>;

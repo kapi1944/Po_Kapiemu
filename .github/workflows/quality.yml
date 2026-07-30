@@ -1,0 +1,29 @@
+name: Kontrola jakości
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  jakosc:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pobierz repozytorium
+        uses: actions/checkout@v4
+      - name: Przygotuj Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Zainstaluj zależności
+        run: npm ci
+      - name: Sprawdź kodowanie
+        run: npm run check:encoding
+      - name: Sprawdź lint
+        run: npm run lint
+      - name: Uruchom testy
+        run: npm test
+      - name: Zbuduj aplikację
+        run: npm run build
+      - name: Sprawdź składnię serwera
+        run: npm run check:server

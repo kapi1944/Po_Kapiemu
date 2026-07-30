@@ -3,7 +3,8 @@ import { NavLink, Outlet } from 'react-router-dom';
 import { KomunikatFunkcji } from './FeatureNotice';
 import { SzybkieWyszukiwanie } from '../moduly/wyszukiwanie/SzybkieWyszukiwanie';
 import { Icon } from './Icons';
-import { FormularzLogowania, useAutoryzacja } from '../moduly/auth/Autoryzacja';
+import { FormularzLogowania } from '../moduly/auth/Autoryzacja';
+import { useAutoryzacja } from '../moduly/auth/useAutoryzacja';
 import { etykietaGlownejRoli } from '../moduly/auth/uprawnienia';
 
 const nawigacjaGlowna = [

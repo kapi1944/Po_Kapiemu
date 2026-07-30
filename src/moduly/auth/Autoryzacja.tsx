@@ -1,14 +1,7 @@
-import { createContext, type FormEvent, type ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { type FormEvent, type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { kontekstAutoryzacji, type KontekstAutoryzacji } from './kontekstAutoryzacji';
 import type { Uzytkownik } from './portAutoryzacji';
-
-type KontekstAutoryzacji = {
-  uzytkownik: Uzytkownik | null;
-  ladowanie: boolean;
-  zaloguj: (email: string, haslo: string) => Promise<boolean>;
-  wyloguj: () => Promise<void>;
-};
-
-const kontekstAutoryzacji = createContext<KontekstAutoryzacji | null>(null);
+import { useAutoryzacja } from './useAutoryzacja';
 
 async function pobierzUzytkownikaSesji() {
   try {
@@ -57,12 +50,6 @@ export function DostawcaAutoryzacji({ children: dzieci }: { children: ReactNode 
   return <kontekstAutoryzacji.Provider value={wartosc}>{dzieci}</kontekstAutoryzacji.Provider>;
 }
 
-export function useAutoryzacja() {
-  const wartosc = useContext(kontekstAutoryzacji);
-  if (!wartosc) throw new Error('useAutoryzacja wymaga DostawcyAutoryzacji.');
-  return wartosc;
-}
-
 export function FormularzLogowania({ zamknij }: { zamknij: () => void }) {
   const { zaloguj } = useAutoryzacja();
   const [email, ustawEmail] = useState('');
@@ -74,6 +61,7 @@ export function FormularzLogowania({ zamknij }: { zamknij: () => void }) {
 
   useEffect(() => {
     const dialog = okno.current;
+    const elementDoPrzywrocenia = elementOtwierajacy.current;
     if (!dialog) return;
     const poprzedniOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -81,7 +69,7 @@ export function FormularzLogowania({ zamknij }: { zamknij: () => void }) {
     return () => {
       if (dialog.open) dialog.close();
       document.body.style.overflow = poprzedniOverflow;
-      elementOtwierajacy.current?.focus();
+      elementDoPrzywrocenia?.focus();
     };
   }, []);
 
