@@ -11,8 +11,8 @@ export function ProjectDetailPage() {
   const { slug } = useParams();
   const projekt = projects.find(element => element.slug === slug);
   const szczegoly = projekt ? szczegolyProjektow[projekt.slug] : undefined;
-  const sekcje = useMemo(() => projekt ? pobierzDostepneSekcje(projekt, szczegoly) : [], [projekt, szczegoly]);
   const { rola, ustawRole } = useRolaWidza();
+  const sekcje = useMemo(() => projekt ? pobierzDostepneSekcje(projekt, szczegoly, rola) : [], [projekt, szczegoly, rola]);
   const [aktywnaSekcja, ustawAktywnaSekcje] = useState(sekcje[0]?.id ?? '');
   const [sugestiaAktywna, ustawSugestieAktywna] = useState(true);
   useEffect(() => {
