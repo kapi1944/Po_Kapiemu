@@ -12,6 +12,7 @@ import { ContentDetailPage } from './pages/ContentDetailPage';
 import { ReviewDetailPage } from './pages/ReviewDetailPage';
 import { DostawcaAutoryzacji } from './moduly/auth/Autoryzacja';
 import './App.css';
+import './moduly/auth/Autoryzacja.css';
 import './routes.css';
 import './readability.css';
 import './pages/ProjectDetailPage.css';

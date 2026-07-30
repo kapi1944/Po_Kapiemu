@@ -4,6 +4,7 @@ import { KomunikatFunkcji } from './FeatureNotice';
 import { SzybkieWyszukiwanie } from '../moduly/wyszukiwanie/SzybkieWyszukiwanie';
 import { Icon } from './Icons';
 import { FormularzLogowania, useAutoryzacja } from '../moduly/auth/Autoryzacja';
+import { etykietaGlownejRoli } from '../moduly/auth/uprawnienia';
 
 const nawigacjaGlowna = [
   ['/', 'Start', 'home'], ['/projekty', 'Projekty', 'projects'], ['/glosowania', 'Głosowania', 'vote'],
@@ -27,9 +28,9 @@ export function Layout() {
   const [motyw, ustawMotyw] = useState<Motyw>(() => (localStorage.getItem('pk-theme') as Motyw) || 'dark');
   const [menuMobilneOtwarte, ustawMenuMobilneOtwarte] = useState(false);
   const [widokKompaktowy, ustawWidokKompaktowy] = useState(false);
-
-  const { uzytkownik, wyloguj } = useAutoryzacja();
   const [czyLogowanieOtwarte, ustawCzyLogowanieOtwarte] = useState(false);
+  const { uzytkownik, ladowanie, wyloguj } = useAutoryzacja();
+
   useEffect(() => {
     const korzen = document.documentElement;
     if (motyw === 'system') korzen.removeAttribute('data-theme'); else korzen.setAttribute('data-theme', motyw);
@@ -39,6 +40,7 @@ export function Layout() {
   const zmienMotyw = () => ustawMotyw(obecny => obecny === 'system' ? 'light' : obecny === 'light' ? 'dark' : 'system');
   const etykietaMotywu = motyw === 'system' ? 'System' : motyw === 'light' ? 'Jasny' : 'Ciemny';
   const zamknijMenu = () => ustawMenuMobilneOtwarte(false);
+  const rolaKonta = uzytkownik ? etykietaGlownejRoli(uzytkownik.role) : '';
 
   return <div className={`app-shell ${widokKompaktowy ? 'is-compact' : ''}`}>
     <aside className={`sidebar ${menuMobilneOtwarte ? 'is-open' : ''}`}>
@@ -54,8 +56,13 @@ export function Layout() {
         <NavLink className="sidebar-add" to="/dodaj-pomysl"><Icon name="plus" size={18}/><span>Dodaj pomysł</span></NavLink>
         <div className="sidebar-social" aria-label="Media społecznościowe"><a href="https://www.youtube.com" aria-label="YouTube"><span>YT</span></a><a href="https://www.github.com" aria-label="GitHub"><span>GH</span></a><NavLink to="/kontakt" aria-label="Kontakt"><Icon name="mail" size={15}/></NavLink></div>
         <button className="theme-switch" onClick={zmienMotyw} aria-label={`Zmień motyw. Obecnie: ${etykietaMotywu}`}><Icon name={motyw === 'dark' ? 'moon' : 'sun'} size={17}/><span>Motyw: {etykietaMotywu}</span></button>
-        <section className="profil-autoryzacji" aria-label={'Konto u\u017cytkownika'}>{uzytkownik ? <><span className="profile-avatar">{uzytkownik.nazwaWyswietlana.charAt(0)}</span><span className="profile-copy"><b>{uzytkownik.nazwaWyswietlana}</b><small>{uzytkownik.role[0]}</small></span><button type="button" onClick={wyloguj}>Wyloguj</button></> : <button type="button" onClick={() => ustawCzyLogowanieOtwarte(true)}><span className="profile-avatar">?</span><span className="profile-copy"><b>{'Go\u015b\u0107'}</b><small>{'Zaloguj si\u0119 do konta'}</small></span><Icon name="arrow" size={15}/></button>}</section>
-        <KomunikatFunkcji klasaKontenera="komunikat-funkcji--boczny" klasaPrzycisku="sidebar-profile" etykieta="Informacja o koncie użytkownika" tytul="Konto użytkownika" opis="Prawdziwe logowanie zostanie wdrożone po domknięciu publicznego frontendu i modeli danych. Ustalone metody to Google oraz magic link wysyłany e-mailem; klasyczne hasło nie jest planowane."><span className="profile-avatar">K</span><span className="profile-copy"><b>Gość</b><small>Zaloguj się do konta</small></span><Icon name="arrow" size={15}/></KomunikatFunkcji>
+        <section className="profil-autoryzacji" aria-label="Konto użytkownika">
+          {ladowanie
+            ? <span className="stan-ladowania-konta" role="status">Sprawdzanie sesji…</span>
+            : uzytkownik
+              ? <><span className="profile-avatar">{uzytkownik.nazwaWyswietlana.charAt(0)}</span><span className="profile-copy"><b>{uzytkownik.nazwaWyswietlana}</b><small>{rolaKonta}</small></span><button type="button" onClick={() => void wyloguj()}>Wyloguj</button></>
+              : <button type="button" onClick={() => ustawCzyLogowanieOtwarte(true)}><span className="profile-avatar">?</span><span className="profile-copy"><b>Gość</b><small>Zaloguj się do konta</small></span><Icon name="arrow" size={15}/></button>}
+        </section>
         <div className="mini-status"><span className="pulse-dot"/> Po Kapiemu · beta</div>
       </div>
     </aside>
@@ -64,11 +71,20 @@ export function Layout() {
       <header className="topbar">
         <div className="topbar-view"><span>Widok</span><button className={widokKompaktowy ? 'active' : ''} onClick={() => ustawWidokKompaktowy(true)}>Kompaktowy</button><button className={widokKompaktowy ? '' : 'active'} onClick={() => ustawWidokKompaktowy(false)}>Pełny</button></div>
         <SzybkieWyszukiwanie/>
-        <div className="topbar-actions"><NavLink className="button primary compact topbar-add" to="/dodaj-pomysl"><Icon name="plus" size={16}/><span>Dodaj pomysł</span></NavLink><KomunikatFunkcji klasaPrzycisku="topbar-theme" etykieta="Informacja o powiadomieniach" tytul="Powiadomienia" opis="Centrum powiadomień jest w przygotowaniu. Będzie zbierać ważne zmiany w projektach i aktywność."><Icon name="bell" size={17}/></KomunikatFunkcji><button className="topbar-theme" onClick={zmienMotyw} aria-label={`Zmień motyw. Obecnie: ${etykietaMotywu}`}><Icon name={motyw === 'dark' ? 'moon' : 'sun'} size={17}/></button><details className="account-menu-wrap"><summary className="account-button"><Icon name="user" size={16}/><span>Konto</span></summary><nav className="account-menu" aria-label="Menu konta"><NavLink to="/moje-projekty">Moje projekty</NavLink><NavLink to="/obserwowane">Obserwowane</NavLink><NavLink to="/zapisane">Zapisane</NavLink><NavLink to="/moja-aktywnosc">Moja aktywność</NavLink></nav></details></div>
+        <div className="topbar-actions">
+          <NavLink className="button primary compact topbar-add" to="/dodaj-pomysl"><Icon name="plus" size={16}/><span>Dodaj pomysł</span></NavLink>
+          <KomunikatFunkcji klasaPrzycisku="topbar-theme" etykieta="Informacja o powiadomieniach" tytul="Powiadomienia" opis="Centrum powiadomień jest w przygotowaniu. Będzie zbierać ważne zmiany w projektach i aktywność."><Icon name="bell" size={17}/></KomunikatFunkcji>
+          <button className="topbar-theme" onClick={zmienMotyw} aria-label={`Zmień motyw. Obecnie: ${etykietaMotywu}`}><Icon name={motyw === 'dark' ? 'moon' : 'sun'} size={17}/></button>
+          {ladowanie
+            ? <span className="stan-ladowania-konta stan-ladowania-konta--topbar" role="status">Sprawdzanie sesji…</span>
+            : uzytkownik
+              ? <details className="account-menu-wrap"><summary className="account-button" aria-label={`Menu konta: ${uzytkownik.nazwaWyswietlana}, ${rolaKonta}`}><Icon name="user" size={16}/><span><b>{uzytkownik.nazwaWyswietlana}</b><small>{rolaKonta}</small></span></summary><nav className="account-menu" aria-label="Menu konta"><NavLink to="/moje-projekty">Moje projekty</NavLink><NavLink to="/obserwowane">Obserwowane</NavLink><NavLink to="/zapisane">Zapisane</NavLink><NavLink to="/moja-aktywnosc">Moja aktywność</NavLink><button type="button" onClick={() => void wyloguj()}>Wyloguj</button></nav></details>
+              : <button className="account-button" type="button" onClick={() => ustawCzyLogowanieOtwarte(true)}><Icon name="user" size={16}/><span>Zaloguj się</span></button>}
+        </div>
       </header>
       <header className="mobile-header"><NavLink to="/" className="mobile-brand"><span className="brand-mark small">PK</span><strong>Po Kapiemu</strong></NavLink><button className="icon-button" onClick={() => ustawMenuMobilneOtwarte(!menuMobilneOtwarte)} aria-label={menuMobilneOtwarte ? 'Zamknij menu' : 'Otwórz menu'}><Icon name="menu"/></button></header>
       <Outlet/>
-    {czyLogowanieOtwarte && <FormularzLogowania zamknij={() => ustawCzyLogowanieOtwarte(false)}/>}
+      {czyLogowanieOtwarte && <FormularzLogowania zamknij={() => ustawCzyLogowanieOtwarte(false)}/>}
     </main>
   </div>;
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icons';
+import { useAutoryzacja } from '../moduly/auth/Autoryzacja';
 import './MissingPages.css';
 
 const Naglowek = ({ kicker, title, desc }: { kicker:string; title:string; desc:string }) => <div className="page-hero"><span className="section-kicker">{kicker}</span><h1>{title}</h1><p>{desc}</p></div>;
@@ -31,8 +32,19 @@ const opisyWidokow = {
 } as const;
 
 export function AccountPlaceholderPage({ rodzaj }: { rodzaj:keyof typeof opisyWidokow }) {
+  const { uzytkownik, ladowanie } = useAutoryzacja();
   const [kicker,title,desc] = opisyWidokow[rodzaj];
-  return <div className="page-wrap inner-page"><Naglowek kicker={kicker} title={title} desc={desc}/><article className="wide-card"><Icon name="lock" size={30}/><h2>Funkcja konta jest przygotowana w interfejsie</h2><p className="demo-note">Ta wersja nie udaje działającego logowania ani zapisu na serwerze. Widok zostanie podłączony do prawdziwego konta w osobnym etapie.</p></article></div>;
+  return <div className="page-wrap inner-page">
+    <Naglowek kicker={kicker} title={title} desc={desc}/>
+    <article className="wide-card">
+      <Icon name={uzytkownik ? 'activity' : 'lock'} size={30}/>
+      {ladowanie
+        ? <><h2>Sprawdzanie sesji</h2><p className="demo-note" role="status">Pobieramy stan Twojego konta…</p></>
+        : uzytkownik
+          ? <><h2>{title} — moduł w przygotowaniu</h2><p className="demo-note">Konto {uzytkownik.nazwaWyswietlana} jest zalogowane. Dane tego modułu nie zostały jeszcze wdrożone.</p></>
+          : <><h2>Zaloguj się, aby otworzyć ten moduł</h2><p className="demo-note">Skorzystaj z przycisku „Zaloguj się” w menu konta. Logowanie działa, ale zawartość tego modułu nie została jeszcze wdrożona.</p></>}
+    </article>
+  </div>;
 }
 
 export function AddIdeaPage() {

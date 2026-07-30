@@ -1,0 +1,95 @@
+.stan-ladowania-konta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  color: var(--muted-strong);
+  font-size: 12px;
+}
+
+.stan-ladowania-konta--topbar {
+  padding: 0 8px;
+}
+
+.account-button > span {
+  display: grid;
+  text-align: left;
+}
+
+.account-button > span b {
+  font-size: 12px;
+}
+
+.account-button > span small {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.account-menu button {
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0 0 7px 7px;
+  padding: 9px;
+  background: transparent;
+  color: var(--brand-strong);
+  font-size: 12px;
+  font-weight: 800;
+  text-align: left;
+}
+
+.account-menu button:hover {
+  background: var(--brand-subtle);
+}
+
+dialog.okno-logowania {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: auto;
+  border: 0;
+  padding: 20px;
+  background: transparent;
+  color: var(--text);
+}
+
+dialog.okno-logowania::backdrop {
+  background: rgba(3, 6, 10, .72);
+  backdrop-filter: blur(5px);
+}
+
+.formularz-logowania {
+  margin: auto;
+}
+
+.formularz-logowania > p,
+.formularz-logowania label {
+  font-size: 13px;
+}
+
+.formularz-logowania input,
+.formularz-logowania .button {
+  min-height: 42px;
+  font-size: 14px;
+}
+
+.stan-ladowania-projektu {
+  min-height: 180px;
+  margin: 0;
+  padding: 48px 0;
+  color: var(--muted-strong);
+  font-size: 14px;
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  dialog.okno-logowania {
+    padding: 12px;
+  }
+
+  .formularz-logowania {
+    max-height: calc(100dvh - 24px);
+    overflow-y: auto;
+    padding: 18px;
+  }
+}

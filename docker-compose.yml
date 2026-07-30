@@ -9,16 +9,30 @@ services:
     volumes:
       - dane_postgres:/var/lib/postgresql/data
       - ./server/baza.sql:/docker-entrypoint-initdb.d/01-baza.sql:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
   aplikacja:
     build: .
     restart: unless-stopped
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@baza:5432/${POSTGRES_DB}
+      PORT: 3000
       NODE_ENV: production
       BCRYPT_KOSZT: 12
       CZAS_SESJI_DNI: 7
     depends_on:
-      - baza
+      baza:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD', 'node', '-e', "fetch('http://127.0.0.1:3000/api/health').then(odpowiedz=>{if(!odpowiedz.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
   caddy:
     image: caddy:2-alpine
     restart: unless-stopped
@@ -32,7 +46,8 @@ services:
       - dane_caddy:/data
       - konfiguracja_caddy:/config
     depends_on:
-      - aplikacja
+      aplikacja:
+        condition: service_healthy
 volumes:
   dane_postgres:
   dane_caddy:

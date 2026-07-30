@@ -1,4 +1,4 @@
-export type RolaUzytkownika = 'wlasciciel' | 'administrator' | 'moderator' | 'redaktor' | 'uzytkownik' | 'widz';
+export type RolaUzytkownika = 'wlasciciel' | 'administrator' | 'moderator' | 'redaktor' | 'wspierajacy' | 'uzytkownik' | 'widz';
 
 export type Uzytkownik = {
   id: string;
