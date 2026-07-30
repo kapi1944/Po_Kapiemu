@@ -5,6 +5,7 @@ import { BlokadaDlaGoscia, LIMIT_KART_DLA_GOSCIA } from '../components/GuestLock
 import { Icon } from '../components/Icons';
 import { ProjectCard } from '../components/ProjectCard';
 import { projects, type ProjectCategory } from '../data/siteData';
+import { useAutoryzacja } from '../moduly/auth/Autoryzacja';
 
 type TrybProjektow = 'active' | 'all';
 type FiltrKategorii = 'all' | ProjectCategory;
@@ -13,10 +14,12 @@ const filtryKategorii: Array<{ value: FiltrKategorii; label: string }> = [
 ];
 
 // Tymczasowo strona działa jako gość. Po podpięciu auth tę wartość zastąpi rzeczywisty stan sesji.
-const CZY_UZYTKOWNIK_ZALOGOWANY = false;
 
 export function HomePage() {
   const [tryb, ustawTryb] = useState<TrybProjektow>('active');
+  const { uzytkownik } = useAutoryzacja();
+  const czyUzytkownikZalogowany = Boolean(uzytkownik);
+  const CZY_UZYTKOWNIK_ZALOGOWANY = czyUzytkownikZalogowany;
   const [kategoria, ustawKategorie] = useState<FiltrKategorii>('all');
   const widoczneProjekty = useMemo(() => projects.filter(projekt => (tryb === 'all' || projekt.active) && (kategoria === 'all' || projekt.category === kategoria)), [tryb, kategoria]);
   return <div className="page-wrap home-page">

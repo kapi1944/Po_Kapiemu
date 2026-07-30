@@ -1,0 +1,4 @@
+{$DOMENA} {
+  encode zstd gzip
+  reverse_proxy aplikacja:3000
+}

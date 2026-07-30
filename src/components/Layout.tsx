@@ -3,6 +3,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 import { KomunikatFunkcji } from './FeatureNotice';
 import { SzybkieWyszukiwanie } from '../moduly/wyszukiwanie/SzybkieWyszukiwanie';
 import { Icon } from './Icons';
+import { FormularzLogowania, useAutoryzacja } from '../moduly/auth/Autoryzacja';
 
 const nawigacjaGlowna = [
   ['/', 'Start', 'home'], ['/projekty', 'Projekty', 'projects'], ['/glosowania', 'Głosowania', 'vote'],
@@ -27,6 +28,8 @@ export function Layout() {
   const [menuMobilneOtwarte, ustawMenuMobilneOtwarte] = useState(false);
   const [widokKompaktowy, ustawWidokKompaktowy] = useState(false);
 
+  const { uzytkownik, wyloguj } = useAutoryzacja();
+  const [czyLogowanieOtwarte, ustawCzyLogowanieOtwarte] = useState(false);
   useEffect(() => {
     const korzen = document.documentElement;
     if (motyw === 'system') korzen.removeAttribute('data-theme'); else korzen.setAttribute('data-theme', motyw);
@@ -51,6 +54,7 @@ export function Layout() {
         <NavLink className="sidebar-add" to="/dodaj-pomysl"><Icon name="plus" size={18}/><span>Dodaj pomysł</span></NavLink>
         <div className="sidebar-social" aria-label="Media społecznościowe"><a href="https://www.youtube.com" aria-label="YouTube"><span>YT</span></a><a href="https://www.github.com" aria-label="GitHub"><span>GH</span></a><NavLink to="/kontakt" aria-label="Kontakt"><Icon name="mail" size={15}/></NavLink></div>
         <button className="theme-switch" onClick={zmienMotyw} aria-label={`Zmień motyw. Obecnie: ${etykietaMotywu}`}><Icon name={motyw === 'dark' ? 'moon' : 'sun'} size={17}/><span>Motyw: {etykietaMotywu}</span></button>
+        <section className="profil-autoryzacji" aria-label={'Konto u\u017cytkownika'}>{uzytkownik ? <><span className="profile-avatar">{uzytkownik.nazwaWyswietlana.charAt(0)}</span><span className="profile-copy"><b>{uzytkownik.nazwaWyswietlana}</b><small>{uzytkownik.role[0]}</small></span><button type="button" onClick={wyloguj}>Wyloguj</button></> : <button type="button" onClick={() => ustawCzyLogowanieOtwarte(true)}><span className="profile-avatar">?</span><span className="profile-copy"><b>{'Go\u015b\u0107'}</b><small>{'Zaloguj si\u0119 do konta'}</small></span><Icon name="arrow" size={15}/></button>}</section>
         <KomunikatFunkcji klasaKontenera="komunikat-funkcji--boczny" klasaPrzycisku="sidebar-profile" etykieta="Informacja o koncie użytkownika" tytul="Konto użytkownika" opis="Prawdziwe logowanie zostanie wdrożone po domknięciu publicznego frontendu i modeli danych. Ustalone metody to Google oraz magic link wysyłany e-mailem; klasyczne hasło nie jest planowane."><span className="profile-avatar">K</span><span className="profile-copy"><b>Gość</b><small>Zaloguj się do konta</small></span><Icon name="arrow" size={15}/></KomunikatFunkcji>
         <div className="mini-status"><span className="pulse-dot"/> Po Kapiemu · beta</div>
       </div>
@@ -64,6 +68,7 @@ export function Layout() {
       </header>
       <header className="mobile-header"><NavLink to="/" className="mobile-brand"><span className="brand-mark small">PK</span><strong>Po Kapiemu</strong></NavLink><button className="icon-button" onClick={() => ustawMenuMobilneOtwarte(!menuMobilneOtwarte)} aria-label={menuMobilneOtwarte ? 'Zamknij menu' : 'Otwórz menu'}><Icon name="menu"/></button></header>
       <Outlet/>
+    {czyLogowanieOtwarte && <FormularzLogowania zamknij={() => ustawCzyLogowanieOtwarte(false)}/>}
     </main>
   </div>;
 }

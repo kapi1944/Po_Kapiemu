@@ -1,10 +1,9 @@
-export type RolaUzytkownika = 'wlasciciel' | 'administrator' | 'moderator' | 'redaktor' | 'uzytkownik';
-export type MetodaLogowania = 'google' | 'magic-link';
+export type RolaUzytkownika = 'wlasciciel' | 'administrator' | 'moderator' | 'redaktor' | 'uzytkownik' | 'widz';
 
 export type Uzytkownik = {
   id: string;
-  email: string | null;
-  nazwaWyswietlana: string | null;
+  email: string;
+  nazwaWyswietlana: string;
   role: RolaUzytkownika[];
 };
 
@@ -15,10 +14,6 @@ export type StanAutoryzacji = {
 
 export interface PortAutoryzacji {
   pobierzStan(): Promise<StanAutoryzacji>;
-  zalogujPrzezGoogle(): Promise<void>;
-  wyslijMagicLink(email: string): Promise<void>;
+  zaloguj(email: string, haslo: string): Promise<boolean>;
   wyloguj(): Promise<void>;
 }
-
-// To jest wyłącznie kontrakt niezależny od dostawcy.
-// Adapter do Supabase/Firebase/Appwrite/własnego backendu powstanie dopiero po decyzji nr 24.

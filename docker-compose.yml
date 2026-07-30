@@ -1,0 +1,39 @@
+services:
+  baza:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - dane_postgres:/var/lib/postgresql/data
+      - ./server/baza.sql:/docker-entrypoint-initdb.d/01-baza.sql:ro
+  aplikacja:
+    build: .
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@baza:5432/${POSTGRES_DB}
+      NODE_ENV: production
+      BCRYPT_KOSZT: 12
+      CZAS_SESJI_DNI: 7
+    depends_on:
+      - baza
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+    environment:
+      DOMENA: ${DOMENA}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - dane_caddy:/data
+      - konfiguracja_caddy:/config
+    depends_on:
+      - aplikacja
+volumes:
+  dane_postgres:
+  dane_caddy:
+  konfiguracja_caddy:
