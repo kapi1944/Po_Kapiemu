@@ -1,16 +1,27 @@
+﻿import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { projects } from '../data/siteData';
-import { Icon } from '../components/Icons';
-import { KomunikatFunkcji } from '../components/FeatureNotice';
+import { szczegolyProjektow } from '../data/projectDetails';
+import { pobierzDostepneSekcje, RenderowaneSekcjeProjektu } from '../components/project/rejestrSekcjiProjektu';
+import './ProjectDetailPage.css';
 
 export function ProjectDetailPage() {
   const { slug } = useParams();
   const projekt = projects.find(element => element.slug === slug);
+  const szczegoly = projekt ? szczegolyProjektow[projekt.slug] : undefined;
+  const sekcje = projekt ? pobierzDostepneSekcje(projekt, szczegoly) : [];
+  const [aktywnaSekcja, ustawAktywnaSekcje] = useState(sekcje[0]?.id ?? '');
+  useEffect(() => {
+    if (!sekcje.length) return;
+    const obserwator = new IntersectionObserver(wpisy => { const widoczna = wpisy.find(wpis => wpis.isIntersecting); if (widoczna) ustawAktywnaSekcje(widoczna.target.id); }, { rootMargin:'-25% 0px -65% 0px' });
+    sekcje.forEach(sekcja => { const element = document.getElementById(sekcja.id); if (element) obserwator.observe(element); });
+    return () => obserwator.disconnect();
+  }, [sekcje]);
   if (!projekt) return <div className="page-wrap inner-page"><h1>Nie znaleziono projektu</h1><Link to="/projekty">Wróć do projektów</Link></div>;
-  if (projekt.locked) return <div className="page-wrap inner-page"><div className="locked-page"><Icon name="lock" size={42}/><span className="section-kicker">PROJEKT ZABLOKOWANY</span><h1>{projekt.title}</h1><p>Ten projekt jest widoczny tylko dla zalogowanych użytkowników. Logowanie zostanie dodane w kolejnym etapie.</p><Link className="button secondary" to="/projekty">Wróć do projektów</Link></div></div>;
-
-  return <div className="page-wrap inner-page">
-    <div className={`project-detail-hero category-${projekt.category}`}><div><span className="section-kicker">{projekt.eyebrow}</span><h1>{projekt.title}</h1><p>{projekt.description}</p><div className="project-meta-row"><span>{projekt.status}</span><b>{projekt.progress}% ukończone</b></div><div className="progress-track large"><span style={{width:`${projekt.progress}%`}}/></div></div><div className="project-big-symbol">{projekt.title.slice(0,2).toUpperCase()}</div></div>
-    <div className="detail-grid"><section className="detail-card"><span className="section-kicker">NAJWAŻNIEJSZE</span><h2>Co już jest w projekcie?</h2><ul className="feature-list">{projekt.highlights.map(element => <li key={element}><span>✓</span>{element}</li>)}</ul></section><section className="detail-card"><span className="section-kicker">AKTUALIZACJE</span><h2>Ostatnie zmiany</h2><div className="timeline-item"><b>{projekt.lastUpdated}</b><p>Przygotowano publiczną prezentację projektu na stronie Po Kapiemu.</p></div><div className="timeline-item"><b>Poprzednio</b><p>Rozwój funkcji i porządkowanie podstawowego workflow.</p></div></section><section className="detail-card"><span className="section-kicker">GŁOSOWANIA</span><h2>Decyzje społeczności</h2><p>Tu pojawią się głosowania związane bezpośrednio z projektem.</p><KomunikatFunkcji klasaPrzycisku="button secondary compact" etykieta="Informacja o głosowaniach projektu" tytul="Głosowania projektu" opis="Głosowania przypisane do projektów są w przygotowaniu. Pozwolą społeczności pomagać w decyzjach dotyczących tego projektu.">Brak aktywnych głosowań</KomunikatFunkcji></section><section className="detail-card"><span className="section-kicker">MATERIAŁY</span><h2>Pliki i publikacje</h2><p>Dokumentacja, materiały do pobrania oraz filmy powiązane z projektem.</p><Link className="text-link" to="/tresci">Przejdź do treści <Icon name="arrow" size={15}/></Link></section></div>
+  if (projekt.locked) return <div className="page-wrap inner-page"><div className="locked-page"><h1>{projekt.title}</h1><p>Ten projekt jest widoczny tylko dla zalogowanych użytkowników.</p><Link className="button secondary" to="/projekty">Wróć do projektów</Link></div></div>;
+  return <div className={`page-wrap inner-page strona-projektu category-${projekt.category}`}>
+    <header className="project-detail-hero"><div><span className="section-kicker">{projekt.eyebrow}</span><h1>{projekt.title}</h1><p>{projekt.description}</p></div>{projekt.image && <img src={projekt.image} alt=""/>}</header>
+    {sekcje.length > 0 && <nav className="nawigacja-sekcji-projektu" aria-label="Sekcje projektu">{sekcje.map(sekcja => <a key={sekcja.id} className={aktywnaSekcja === sekcja.id ? 'aktywna' : ''} href={`#${sekcja.id}`} aria-current={aktywnaSekcja === sekcja.id ? 'location' : undefined}>{sekcja.etykieta}</a>)}</nav>}
+    <RenderowaneSekcjeProjektu sekcje={sekcje} wyroznione={szczegoly?.wyroznioneSekcje}/>
   </div>;
 }

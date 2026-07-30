@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+﻿import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { HomePage } from './pages/HomePage';
 import { ProjectsPage } from './pages/ProjectsPage';
@@ -13,6 +13,7 @@ import { ReviewDetailPage } from './pages/ReviewDetailPage';
 import './App.css';
 import './routes.css';
 import './readability.css';
+import './pages/ProjectDetailPage.css';
 
 export default function App() {
   return <BrowserRouter><Routes><Route element={<Layout/>}>

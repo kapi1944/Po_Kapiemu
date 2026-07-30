@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+﻿import type { ReactNode } from 'react';
 
 type WlasciwosciIkony = { name: string; size?: number };
 
@@ -29,6 +29,12 @@ const sciezki: Record<string, ReactNode> = {
   coffee: <><path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Z"/><path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17M7 4v1M11 3v2M15 4v1"/></>,
   tool: <><path d="M14.7 6.3a4 4 0 0 0-5-5l2.2 2.2-2.4 2.4-2.2-2.2a4 4 0 0 0 5 5L20 16.4a2.1 2.1 0 0 1-3 3l-7.6-7.7"/></>,
   external: <><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h6"/></>,
+  chevronUp: <path d="m6 14 6-6 6 6"/>, chevronDown: <path d="m6 10 6 6 6-6"/>,
+  grip: <><circle cx="9" cy="6" r=".8"/><circle cx="15" cy="6" r=".8"/><circle cx="9" cy="12" r=".8"/><circle cx="15" cy="12" r=".8"/><circle cx="9" cy="18" r=".8"/><circle cx="15" cy="18" r=".8"/></>,
+  comment: <path d="M20 11.5a7.5 7.5 0 0 1-8 7.5 8.7 8.7 0 0 1-3.6-.8L4 20l1.2-3.5A7.2 7.2 0 0 1 4.5 13 7.5 7.5 0 0 1 12 5.5h.5A7.5 7.5 0 0 1 20 11.5Z"/>,
+  thumbsUp: <path d="M7 10v10H4V10h3ZM7 20h9.2a2 2 0 0 0 1.9-1.4l1.5-5a2 2 0 0 0-1.9-2.6H14l.5-3.2A3 3 0 0 0 11.6 4L7 10Z"/>, thumbsDown: <path d="M7 14V4H4v10h3ZM7 4h9.2a2 2 0 0 1 1.9 1.4l1.5 5A2 2 0 0 1 17.7 13H14l.5 3.2a3 3 0 0 1-2.9 3.8L7 14Z"/>,
+  flag: <><path d="M5 21V4"/><path d="M5 5c4-3 6 3 14 0v10c-8 3-10-3-14 0"/></>, pin: <><path d="m15 4 5 5-3 1-4 4-3-3 4-4 1-3Z"/><path d="m10 14-5 6"/></>,
+  fullscreen: <path d="M8 3H3v5M16 3h5v5M21 16v5h-5M3 16v5h5"/>, previous: <><path d="M6 5v14"/><path d="m18 6-8 6 8 6V6Z"/></>, next: <><path d="M18 5v14"/><path d="m6 6 8 6-8 6V6Z"/></>,
 };
 
 export function Icon({ name, size = 20 }: WlasciwosciIkony) {
