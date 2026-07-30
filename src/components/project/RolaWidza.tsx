@@ -1,0 +1,7 @@
+﻿import { useEffect, useState } from 'react';
+import type { RolaWidza } from '../../data/projectDetails';
+const role: RolaWidza[] = ['guest','registered','supporter','author'];
+const labels: Record<RolaWidza,string> = { guest:'Gość', registered:'Zalogowany', supporter:'Wspierający', author:'Autor' };
+export function useRolaWidza() { const [rola, ustawRole] = useState<RolaWidza>(() => { const wartosc = new URLSearchParams(window.location.search).get('rola'); return role.includes(wartosc as RolaWidza) ? wartosc as RolaWidza : 'guest'; }); useEffect(() => { const adres = new URL(window.location.href); if (rola === 'guest') adres.searchParams.delete('rola'); else adres.searchParams.set('rola', rola); window.history.replaceState({}, '', adres); }, [rola]); return { rola, ustawRole }; }
+export function SelektorRoli({ rola, ustawRole }: { rola:RolaWidza; ustawRole:(rola:RolaWidza) => void }) { if (!import.meta.env.DEV) return null; return <label className="selektor-roli">Rola demonstracyjna <select value={rola} onChange={zdarzenie => ustawRole(zdarzenie.target.value as RolaWidza)}>{role.map(wartosc => <option key={wartosc} value={wartosc}>{labels[wartosc]}</option>)}</select></label>; }
+export function czyWidacPrzyszlyEtap(rola:RolaWidza, dostep:'registered'|'supporter') { return rola === 'author' || rola === 'supporter' || (rola === 'registered' && dostep === 'registered'); }
