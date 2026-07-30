@@ -6,7 +6,6 @@ import { GaleriaProjektu } from './GaleriaProjektu';
 import { GlosowanieProjektu } from './GlosowanieProjektu';
 import { KomentarzeProjektu } from './KomentarzeProjektu';
 import { CzesciIKoszty, DokumentacjaProjektu, MaterialyProjektu, ZbudujSam } from './ZasobyProjektu';
-import { SekcjaProjektu } from './SekcjaProjektu';
 import { ProjektySpolecznosci, WersjeProjektu } from './WersjeSpolecznosc';
 export type DostepnaSekcja = { id:string; etykieta:string; zawartosc:ReactNode };
 export function pobierzDostepneSekcje(projekt:Project, szczegoly?:SzczegolyProjektu, rola:RolaWidza='guest'):DostepnaSekcja[] { if (!szczegoly) return []; const sekcje:Record<string,DostepnaSekcja|undefined> = {
@@ -22,4 +21,3 @@ export function pobierzDostepneSekcje(projekt:Project, szczegoly?:SzczegolyProje
  spolecznosc:{id:'spolecznosc',etykieta:'Społeczność',zawartosc:<ProjektySpolecznosci szczegoly={szczegoly}/>},
  dokumentacja:szczegoly.dokumentacja?.length?{id:'dokumentacja',etykieta:'Dokumentacja',zawartosc:<DokumentacjaProjektu szczegoly={szczegoly}/>} :undefined,
  }; return (szczegoly.kolejnoscSekcji??Object.keys(sekcje)).map(id=>sekcje[id]).filter((sekcja):sekcja is DostepnaSekcja=>Boolean(sekcja)); }
-export function RenderowaneSekcjeProjektu({sekcje,wyroznione}:{sekcje:DostepnaSekcja[];wyroznione?:string[]}) { return <>{sekcje.map(sekcja=><SekcjaProjektu key={sekcja.id} id={sekcja.id} tytul={sekcja.etykieta} wyrozniona={wyroznione?.includes(sekcja.id)}>{sekcja.zawartosc}</SekcjaProjektu>)}</>; }

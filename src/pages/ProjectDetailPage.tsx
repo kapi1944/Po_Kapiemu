@@ -2,32 +2,17 @@
 import { Link, useParams } from 'react-router-dom';
 import { projects } from '../data/siteData';
 import { szczegolyProjektow } from '../data/projectDetails';
-import { pobierzDostepneSekcje, RenderowaneSekcjeProjektu } from '../components/project/rejestrSekcjiProjektu';
+import { pobierzDostepneSekcje } from '../components/project/rejestrSekcjiProjektu';
+import { RenderowaneSekcjeProjektu } from '../components/project/RenderowaneSekcjeProjektu';
 import { SelektorRoli, useRolaWidza } from '../components/project/RolaWidza';
 import { StatusProjektu, SugestiaDojrzalosci } from '../components/project/StatusProjektu';
 import './ProjectDetailPage.css';
-
-export function ProjectDetailPage() {
-  const { slug } = useParams();
-  const projekt = projects.find(element => element.slug === slug);
-  const szczegoly = projekt ? szczegolyProjektow[projekt.slug] : undefined;
-  const { rola, ustawRole } = useRolaWidza();
-  const sekcje = useMemo(() => projekt ? pobierzDostepneSekcje(projekt, szczegoly, rola) : [], [projekt, szczegoly, rola]);
-  const [aktywnaSekcja, ustawAktywnaSekcje] = useState(sekcje[0]?.id ?? '');
-  const [sugestiaAktywna, ustawSugestieAktywna] = useState(true);
-  useEffect(() => {
-    if (!sekcje.length) return;
-    const obserwator = new IntersectionObserver(wpisy => { const widoczna = wpisy.find(wpis => wpis.isIntersecting); if (widoczna) ustawAktywnaSekcje(widoczna.target.id); }, { rootMargin:'-25% 0px -65% 0px' });
-    sekcje.forEach(sekcja => { const element = document.getElementById(sekcja.id); if (element) obserwator.observe(element); });
-    return () => obserwator.disconnect();
-  }, [sekcje]);
-  if (!projekt) return <div className="page-wrap inner-page"><h1>Nie znaleziono projektu</h1><Link to="/projekty">Wróć do projektów</Link></div>;
-  if (projekt.locked) return <div className="page-wrap inner-page"><div className="locked-page"><h1>{projekt.title}</h1><p>Ten projekt jest widoczny tylko dla zalogowanych użytkowników.</p><Link className="button secondary" to="/projekty">Wróć do projektów</Link></div></div>;
-  return <div className={`page-wrap inner-page strona-projektu category-${projekt.category}`}>
-    <SelektorRoli rola={rola} ustawRole={ustawRole}/>
-    <header className="project-detail-hero"><div><span className="section-kicker">{projekt.eyebrow}</span><h1>{projekt.title}</h1><p>{projekt.description}</p>{szczegoly && <StatusProjektu status={projekt.status} szczegoly={szczegoly} rola={rola}/>}</div>{projekt.image && <img src={projekt.image} alt=""/>}</header>
-    {szczegoly && rola === 'author' && <SugestiaDojrzalosci szczegoly={szczegoly} aktywna={sugestiaAktywna} onZastosuj={() => { localStorage.setItem(`pk-dojrzalosc-${projekt.slug}`, 'zaakceptowana'); ustawSugestieAktywna(false); }} onOdrzuc={() => { localStorage.setItem(`pk-dojrzalosc-${projekt.slug}`, 'odrzucona'); ustawSugestieAktywna(false); }}/>}
-    {sekcje.length > 0 && <nav className="nawigacja-sekcji-projektu" aria-label="Sekcje projektu">{sekcje.map(sekcja => <a key={sekcja.id} className={aktywnaSekcja === sekcja.id ? 'aktywna' : ''} href={`#${sekcja.id}`} aria-current={aktywnaSekcja === sekcja.id ? 'location' : undefined}>{sekcja.etykieta}</a>)}</nav>}
-    <RenderowaneSekcjeProjektu sekcje={sekcje} wyroznione={szczegoly?.wyroznioneSekcje}/>
-  </div>;
-}
+function pobierzLokalnaListe(klucz:string, domyslna:string[]) { try { const dane=JSON.parse(localStorage.getItem(klucz)??'[]'); return Array.isArray(dane)&&dane.length?dane:domyslna; } catch { return domyslna; } }
+export function ProjectDetailPage() { const { slug }=useParams(); const projekt=projects.find(element=>element.slug===slug); const szczegoly=projekt?szczegolyProjektow[projekt.slug]:undefined; const { rola,ustawRole }=useRolaWidza(); const bazowe=useMemo(()=>projekt?pobierzDostepneSekcje(projekt,szczegoly,rola):[],[projekt,szczegoly,rola]); const [kolejnosc,ustawKolejnosc]=useState<string[]>([]); const [wyroznione,ustawWyroznione]=useState<string[]>([]); const [przeciagany,ustawPrzeciagany]=useState<string>(); const [edycja,ustawEdycje]=useState(false); const [aktywna,ustawAktywna]=useState(''); const [sugestia,ustawSugestie]=useState(true);
+ useEffect(()=>{ if(!projekt) return; const domyslna=bazowe.map(element=>element.id); ustawKolejnosc(pobierzLokalnaListe(`pk-section-order-${projekt.slug}`,domyslna)); ustawWyroznione(pobierzLokalnaListe(`pk-section-featured-${projekt.slug}`,szczegoly?.wyroznioneSekcje??[])); },[projekt?.slug]);
+ const sekcje=useMemo(()=>{ const mapa=new Map(bazowe.map(element=>[element.id,element])); return [...kolejnosc,...bazowe.map(element=>element.id)].filter((id,indeks,lista)=>lista.indexOf(id)===indeks).map(id=>mapa.get(id)).filter(Boolean) as typeof bazowe; },[bazowe,kolejnosc]);
+ useEffect(()=>{ if(!sekcje.length)return; const obserwator=new IntersectionObserver(wpisy=>{const wpis=wpisy.find(element=>element.isIntersecting);if(wpis)ustawAktywna(wpis.target.id);},{rootMargin:'-25% 0px -65% 0px'}); sekcje.forEach(sekcja=>{const element=document.getElementById(sekcja.id);if(element)obserwator.observe(element);}); return()=>obserwator.disconnect();},[sekcje]);
+ if(!projekt)return <div className="page-wrap inner-page"><h1>Nie znaleziono projektu</h1><Link to="/projekty">Wróć do projektów</Link></div>;
+ if(projekt.locked)return <div className="page-wrap inner-page"><div className="locked-page"><h1>{projekt.title}</h1><p>Ten projekt jest widoczny tylko dla zalogowanych użytkowników.</p></div></div>;
+ const zapiszKolejnosc=(nowa:string[])=>{ustawKolejnosc(nowa);localStorage.setItem(`pk-section-order-${projekt.slug}`,JSON.stringify(nowa));}; const przesun=(id:string,kierunek:-1|1)=>{const indeks=kolejnosc.indexOf(id);if(indeks<0)return;const docelowy=indeks+kierunek;if(docelowy<0||docelowy>=kolejnosc.length)return;const nowa=[...kolejnosc];[nowa[indeks],nowa[docelowy]]=[nowa[docelowy],nowa[indeks]];zapiszKolejnosc(nowa);}; const upusc=(cel:string)=>{if(!przeciagany||przeciagany===cel)return;const nowa=kolejnosc.filter(id=>id!==przeciagany);nowa.splice(Math.max(0,nowa.indexOf(cel)),0,przeciagany);zapiszKolejnosc(nowa);ustawPrzeciagany(undefined);}; const zmienWyroznienie=(id:string)=>{const nowe=wyroznione.includes(id)?wyroznione.filter(element=>element!==id):[...wyroznione,id];ustawWyroznione(nowe);localStorage.setItem(`pk-section-featured-${projekt.slug}`,JSON.stringify(nowe));};
+ return <div className={`page-wrap inner-page strona-projektu category-${projekt.category}`}><SelektorRoli rola={rola} ustawRole={ustawRole}/><header className="project-detail-hero"><div><span className="section-kicker">{projekt.eyebrow}</span><h1>{projekt.title}</h1><p>{projekt.description}</p>{szczegoly&&<StatusProjektu status={projekt.status} szczegoly={szczegoly} rola={rola}/>}</div>{projekt.image&&<img src={projekt.image} alt=""/>}</header>{szczegoly&&rola==='author'&&<><button type="button" className="button secondary compact" aria-pressed={edycja} onClick={()=>ustawEdycje(obecna=>!obecna)}>{edycja?'Zakończ edycję układu':'Edytuj układ sekcji'}</button><SugestiaDojrzalosci szczegoly={szczegoly} aktywna={sugestia} onZastosuj={()=>{localStorage.setItem(`pk-dojrzalosc-${projekt.slug}`,'zaakceptowana');ustawSugestie(false);}} onOdrzuc={()=>{localStorage.setItem(`pk-dojrzalosc-${projekt.slug}`,'odrzucona');ustawSugestie(false);}}/></>}{sekcje.length>0&&<nav className="nawigacja-sekcji-projektu" aria-label="Sekcje projektu">{sekcje.map(sekcja=><a key={sekcja.id} className={aktywna===sekcja.id?'aktywna':''} href={`#${sekcja.id}`} aria-current={aktywna===sekcja.id?'location':undefined}>{sekcja.etykieta}</a>)}</nav>}<RenderowaneSekcjeProjektu sekcje={sekcje} wyroznione={wyroznione} trybEdycji={edycja&&rola==='author'} przesun={przesun} zmienWyroznienie={zmienWyroznienie} rozpocznijPrzeciaganie={ustawPrzeciagany} upusc={upusc}/></div>; }
